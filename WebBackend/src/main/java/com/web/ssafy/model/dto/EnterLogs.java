@@ -27,5 +27,4 @@ public class EnterLogs {
     @JoinColumn(name = "account_id")
     Account account;
 
-
 }
