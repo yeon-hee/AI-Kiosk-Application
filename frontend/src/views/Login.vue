@@ -54,7 +54,10 @@ export default {
                 this.user.password,
                 function(success){
                     scope.$store.commit("setIsSigned", true);
-                    scope.$store.commit("setUserId", response.data.email);
+                    scope.$store.commit("setUserEmail", success.data.email);
+                    if(success.data.authority==1){ // 관리자일 경우
+                        scope.$store.commit("setIsAdmin", true);
+                    }
                     // 창 닫기
                     location.reload();
                 },

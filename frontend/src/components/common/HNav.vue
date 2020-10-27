@@ -7,17 +7,18 @@
             <v-toolbar-title id="header2">
                 <router-link  style="color:rgb(83,71,122);" id="link-to-home" to="/">HOME</router-link>
                 <router-link id="link-to-entrance" to="/sell">출입기록조회</router-link>
-                <router-link id="link-to-admin" to="/mypage/profile">관리자메뉴</router-link>
+                <router-link id="link-to-admin" to="/mypage/profile" v-if="$store.state.isAdmin">관리자메뉴</router-link>
                 <router-link id="link-to-board" to="/logout">공지사항</router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-title id="header2">
                 <a id="link-to-login"
-                v-if="$store.state.isSigned"
+                v-if="!$store.state.isSigned"
                     @click.stop="signup = true">로그인</a>
                 <a id="link-to-signup"
-                    v-if="$store.state.isSigned"
+                    v-if="!$store.state.isSigned"
                     @click.stop="signin = true">회원가입</a>
+                <router-link id="link-to-logout" to="/logout" v-if="$store.state.isSigned">로그아웃</router-link>
             </v-toolbar-title>
 
             <v-dialog v-model="signup" max-width="500" min-width="300">
@@ -41,6 +42,7 @@ export default {
         return {
             signin: false,
             signup: false,
+            status: false,
             windowSize: {
                 x: 0,
                 y: 0
@@ -51,8 +53,8 @@ export default {
         Login,
         Signup
     },
-    mounted() {
-        
+    created() {
+        this.$store.state.isAdmin = false;
     },
     methods: {
         
@@ -67,7 +69,7 @@ export default {
 *{
     font-family: 'Jua', sans-serif;
 }
-#link-to-home, #link-to-entrance, #link-to-admin, #link-to-board, #link-to-signup, #link-to-login{
+#link-to-home, #link-to-entrance, #link-to-admin, #link-to-board, #link-to-signup, #link-to-login, #link-to-logout{
     color: white;
     font-size:18px;
     margin: 0 10px;

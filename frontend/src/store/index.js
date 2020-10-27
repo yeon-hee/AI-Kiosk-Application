@@ -12,6 +12,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         isSigned: false, // 로그인 여부
+        isAdmin: false, // 관리자 여부
         user: {
             email: "" // 사용자 아이디 저장
         },
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     mutations: {
         setIsSigned(state, isSigned) {
             state.isSigned = isSigned;
+        },
+        setIsAdmin(state, isAdmin) {
+            state.isAdmin = isAdmin;
         },
         setUserEmail(state, email) {
             state.user.email = email;

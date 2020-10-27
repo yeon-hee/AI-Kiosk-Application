@@ -4,10 +4,6 @@
         <div class="banner"> 
             <div id="service">WHO AM I</div>
         </div>
-
-    
-
-        
     </div>
 </template>
 
