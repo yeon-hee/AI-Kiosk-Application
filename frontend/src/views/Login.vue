@@ -16,12 +16,6 @@
                 <v-btn color="green darken-1" text @click="login" min-width="50px">
                     로그인
                 </v-btn>
-                <v-btn text @click.stop="signup = true" min-width="50px">
-                    회원가입
-                </v-btn>
-                <v-dialog v-model="signup" max-width="500">
-                    <Signup></Signup>
-                </v-dialog>
             </v-card-actions>
         </v-container>
     </v-card>
@@ -30,8 +24,8 @@
 
 <script>
 import {login} from "../api/user.js";
-import Signup from "../views/Signup";
 import '@mdi/font/css/materialdesignicons.css';
+
 export default {
     data() {
         return {
@@ -42,13 +36,9 @@ export default {
             }
         };
     },
-    components: {
-        Signup
-    },
     methods: {
         login() {
             const scope = this;
-
             login(
                 this.user.email,
                 this.user.password,

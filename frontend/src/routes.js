@@ -17,6 +17,7 @@ export default [
         name: "logout",
         beforeEnter(to, from, next) {
             store.commit("logout");
+            store.state.isAdmin = false;
             alert("로그아웃 되었습니다.");
             next("/");
         },
