@@ -17,6 +17,7 @@ public class EnterLogs {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @JsonIgnore
     @Column(columnDefinition = "Timestamp default CURRENT_TIME()", insertable = false)
     Timestamp time;
 
@@ -25,6 +26,4 @@ public class EnterLogs {
     @ManyToOne
     @JoinColumn(name = "account_id")
     Account account;
-
-
 }
