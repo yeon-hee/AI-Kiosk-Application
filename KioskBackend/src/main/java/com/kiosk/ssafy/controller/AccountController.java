@@ -1,6 +1,6 @@
 package com.kiosk.ssafy.controller;
 
-import com.kiosk.ssafy.model.dto.AccountName;
+import com.kiosk.ssafy.model.dto.inter.AccountName;
 import com.kiosk.ssafy.model.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
