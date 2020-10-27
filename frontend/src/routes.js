@@ -1,10 +1,16 @@
-import Home from "./views/SaveFace.vue";
+import SaveFace from "./views/SaveFace.vue";
+import Home from "./views/Home.vue";
 
 export default [
     {
-        path : '/home',
-        name : 'Home',
+        path : '/',
+        name : 'home',
         component : Home
+    },
+    {
+        path : '/home',
+        name : 'SaveFace',
+        component : SaveFace
     },
 ]
 
