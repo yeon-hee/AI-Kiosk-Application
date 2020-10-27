@@ -1,22 +1,26 @@
 package com.kiosk.ssafy.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 public class Account {
-    @Id
-    String email;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
+    String email;
     String password;
     String name;
     String phone;
-    boolean isManager;
+    int authority;
     String photo;
 
     @ManyToOne
@@ -24,4 +28,7 @@ public class Account {
     @JsonBackReference
     Place place;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    Set<EnterLogs> enterLogs = new HashSet<>();
 }

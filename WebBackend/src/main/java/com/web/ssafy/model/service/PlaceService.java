@@ -16,19 +16,24 @@ public class PlaceService {
     @Autowired
     PlaceRepo placeRepo;
 
-    public Place save(Place account) {
-        return null;
+    public Place save(Place place) {
+        return placeRepo.save(place);
     }
 
-    public Place getByEmail(String email) {
-        return null;
+    public Place getById(Long id) {
+        return placeRepo.findById(id).get();
     }
 
-    public Place update(Account account) {
-        return null;
+    public Place update(Place place) {
+        Place before = this.getById(place.getId());
+        if (!before.getName().equals("")) before.setName(place.getName());
+        if (!before.getAddress().equals("")) before.setAddress(place.getAddress());
+        if (!before.getPhone().equals("")) before.setPhone(place.getPhone());
+        return before;
     }
 
-    public void delete(String email) {
+    public void delete(Long id) {
+        placeRepo.deleteById(id);
     }
 
 }

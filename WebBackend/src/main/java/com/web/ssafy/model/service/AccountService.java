@@ -27,6 +27,7 @@ public class AccountService {
         if (!account.getPassword().equals("")) before.setPassword(account.getPassword());
         if (!account.getPhone().equals("")) before.setPhone(account.getPhone());
         if (!account.getName().equals("")) before.setName(account.getName());
+        before.setAuthority(account.getAuthority());
 
         return before;
     }
