@@ -48,8 +48,7 @@ export default {
                     if(success.data.authority==1){ // 관리자일 경우
                         scope.$store.commit("setIsAdmin", true);
                     }
-                    // 창 닫기
-                    location.reload();
+                    location.reload(); // 창 닫기
                 },
                 function(fail){
                     alert("유저 이메일 혹은 비밀번호가 일치하지 않습니다.");

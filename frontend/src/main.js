@@ -4,7 +4,6 @@ import VueRouter from 'vue-router';
 import routes from './routes';
 import store from './store';
 import 'vue-material/dist/vue-material.css'
-import '@mdi/font/css/materialdesignicons.css'
 import HNav from "./components/common/HNav";
 import vuetify from './plugins/vuetify';
 
