@@ -21,9 +21,7 @@ public class EnterLogs {
     @Column(columnDefinition = "Timestamp default CURRENT_TIME()", insertable = false)
     Timestamp time;
 
-    Long place;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    Account account;
+    String accountName;
+    String accountEmail;
+    String placeName;
 }
