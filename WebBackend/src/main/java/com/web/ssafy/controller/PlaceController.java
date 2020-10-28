@@ -1,5 +1,7 @@
 package com.web.ssafy.controller;
 
+import java.util.List;
+
 import com.web.ssafy.model.dto.Account;
 import com.web.ssafy.model.dto.Place;
 import com.web.ssafy.model.service.AccountService;
@@ -35,6 +37,19 @@ public class PlaceController {
             logger.error(e.toString());
         }
 
+        return result;
+    }
+
+    @GetMapping("/placeList")
+    @ApiOperation(value = "영업점 전체 검색")
+    public List<Place> getAccountList(){
+        logger.info("get account list");
+        List<Place> result = null;
+        try {
+            result = placeService.getAll();
+        }catch (RuntimeException e){
+            logger.error(e.toString());
+        }
         return result;
     }
 
