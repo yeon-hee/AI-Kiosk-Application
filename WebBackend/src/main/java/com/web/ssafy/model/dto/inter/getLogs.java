@@ -7,13 +7,7 @@ import java.sql.Timestamp;
 
 public interface getLogs {
     Timestamp getTime();
-
-    Long getPlace();
-
-    @JsonIgnore
-    Account getAccount();
-
-    default Long getAccountId(){
-        return getAccount().getId();
-    }
+    String getAccountEmail();
+    String getAccountName();
+    String getPlaceName();
 }
