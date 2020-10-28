@@ -27,8 +27,4 @@ public class Account {
     @JoinColumn(name = "place_id")
     @JsonBackReference
     Place place;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    Set<EnterLogs> enterLogs = new HashSet<>();
 }

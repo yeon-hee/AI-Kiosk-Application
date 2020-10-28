@@ -19,6 +19,6 @@ public class LogService {
     }
 
     public List<getLogs> getLogList(){
-        return logRepo.findAllByOrderByTime();
+        return logRepo.findAllByOrderByTimeDesc();
     }
 }

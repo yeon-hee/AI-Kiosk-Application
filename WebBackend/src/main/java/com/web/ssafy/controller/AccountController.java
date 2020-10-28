@@ -8,6 +8,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.Properties;
+import java.util.Random;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/account")
@@ -41,12 +54,12 @@ public class AccountController {
 
     @GetMapping("/accountInfo")
     @ApiOperation(value = "이메일로 이름 검색")
-    public Account accountInfo(@RequestParam String email){
+    public Account accountInfo(@RequestParam String email) {
         logger.info("save account");
         Account result = null;
         try {
             result = accountService.getByEmail(email);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
         return result;
@@ -54,12 +67,65 @@ public class AccountController {
 
     @PostMapping("/registAccount")
     @ApiOperation(value = "회원 등록")
-    public Account registAccount(@RequestBody Account account){
+    public Account registAccount(@RequestBody Account account) {
         logger.info("save account");
         Account result = null;
         try {
+            StringBuilder token = new StringBuilder();
+            String key = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789^*";
+            Random random = new Random();
+            for (int i = 0; i < 10; i++) {
+                int index = random.nextInt(key.length());
+
+                token.append(key.charAt(index));
+            }
+            account.setPassword(token.toString());
             result = accountService.save(account);
-        }catch (RuntimeException e){
+            String subject = "회원가입 인증 메일"; // 메일 제목
+            String message = "환영합니다! 임시비밀번호 : " + token; // 메일 내용
+
+            // SMTP 서버 설정
+            final String host = "smtp.gmail.com"; // 사용할 smtp host, naver라면 smtp.naver.com
+            final String accountId = "a508whoami";
+            final String accountPwd = "admin123!";
+            final int port = 465; // SMTP 포트
+
+            String receiver = account.getEmail(); // 받는사람 이메일
+            String sender = "ssafy@muticampus.com"; // 보내는사람 이메일
+
+            // Property 정보 생성
+            Properties props = System.getProperties();
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", port);
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.ssl.enable", "true");
+            props.put("mail.smtp.ssl.trust", host);
+
+            // 사용자 인증
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                    return new javax.mail.PasswordAuthentication(accountId, accountPwd);
+                }
+            });
+            session.setDebug(true);
+
+            Message mimeMessage = new MimeMessage(session); //MimeMesage 생성
+
+            try {
+                mimeMessage.setFrom(new InternetAddress(sender));
+                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
+
+                // Message Setting
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(message);
+                Transport.send(mimeMessage); // Transfer
+
+            } catch (MessagingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } // 보내는 EMAIL (정확히 적어야 SMTP 서버에서 인증 실패되지 않음)
+
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
 
@@ -68,12 +134,12 @@ public class AccountController {
 
     @PutMapping("/update")
     @ApiOperation(value = "회원정보 수정")
-    public Account update(@RequestBody Account account){
+    public Account update(@RequestBody Account account) {
         logger.info("update account");
         Account result = null;
         try {
             result = accountService.update(account);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
 
@@ -82,12 +148,12 @@ public class AccountController {
 
     @DeleteMapping("/delete")
     @ApiOperation(value = "회원 삭제")
-    public int delete(@RequestParam String email){
+    public int delete(@RequestParam String email) {
         logger.info("delete account");
 
         try {
             accountService.delete(email);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
 
