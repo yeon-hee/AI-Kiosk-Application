@@ -16,6 +16,7 @@
         "express": "^4.17.1",
         "nativescript-camera": "^4.5.0",
         "vue": "^2.6.10",
+        "vue-confirm-dialog": "^1.0.2",
         "vue-daum-postcode": "^0.9.0",
         "vue-loading-spinner": "^1.0.11",
         "vue-material": "^1.0.0-beta-15",

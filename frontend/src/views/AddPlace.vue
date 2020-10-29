@@ -43,9 +43,6 @@ export default {
     methods: {
         addPlace() { // 지점 추가
             const scope = this;
-            console.log(this.place.name);
-            console.log(this.place.address);
-            console.log(this.place.phone);
             addplace(
                 this.place.name,
                 this.place.address,
@@ -59,9 +56,6 @@ export default {
                 }
             )
         }
-    },
-    created() { // 지점 목록 조회해오기
-        
     },
 };
 </script>

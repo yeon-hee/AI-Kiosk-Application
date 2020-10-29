@@ -16,8 +16,12 @@ export default new Vuex.Store({
         user: {
             email: "" // 사용자 아이디 저장
         },
+        placeId: 0
     },
     mutations: {
+        setplaceId(state, placeId) {
+            state.placeId = placeId;
+        },
         setIsSigned(state, isSigned) {
             state.isSigned = isSigned;
         },

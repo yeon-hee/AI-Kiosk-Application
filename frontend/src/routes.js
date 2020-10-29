@@ -2,12 +2,18 @@ import SaveFace from "./views/SaveFace.vue";
 import Home from "./views/Home.vue";
 import store from "./store";
 import AdminPage from "./components/admin/Admin.vue";
+import PlaceDetail from "./components/admin/PlaceDetail.vue";
 
 export default [
     {
         path : '/',
         name : 'Home',
         component : Home
+    },
+    {
+        path : '/adminMenu/detail/:id',
+        name : 'PlaceDetail',
+        component : PlaceDetail
     },
     {
         path : '/adminMenu',

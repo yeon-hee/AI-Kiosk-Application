@@ -7,7 +7,7 @@ import 'vue-material/dist/vue-material.css'
 import HNav from "./components/common/HNav";
 import vuetify from './plugins/vuetify';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(VueRouter)
 
