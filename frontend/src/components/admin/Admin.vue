@@ -76,7 +76,7 @@ export default {
     text-align:left; 
     width:80%; 
     margin:auto; 
-    margin-top:100px;
+    margin-top:80px;
 }
 
 .box {

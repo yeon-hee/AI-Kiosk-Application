@@ -13,17 +13,19 @@ function login(email, password, success, fail) {
       .catch(fail);
 }
 
-function signup(email, name, password, success, fail) {
-    const user = {
-      email: email,
-      name: name,
-      password: password
+function addUser(email, name, phone, authority, photo, place, success, fail) {
+    const body = {
+        email: email,
+        name: name,
+        phone: phone,
+        authority: authority,
+        photo: photo,
+        place: place
     };
   
-    instance
-      .post("/account/users", JSON.stringify(user))
+    axios.post(API_URL+"/account/registAccount", body)
       .then(success)
       .catch(fail);
 }
-  
-export { signup, login };
+
+export { addUser, login };

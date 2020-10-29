@@ -22,7 +22,20 @@
                 <div style="float: right;">
                     <img id="map" src="../../../public/images/defaultmap.jpg"> 
                 </div>
+            </div><br><br>
+
+            <div>
+                <v-icon style="margin-bottom:9px;">business</v-icon>
+                <span id="detail">직원 관리</span>
+                <span id="total">Total : {{totalSize}}</span>
+                <button style="float:right; margin-bottom:10px; " @click="addAccount">
+                    <v-icon>add_circle_outline</v-icon>
+                </button>
             </div>
+            <div style="clear: both;"></div>
+            <v-divider></v-divider>
+
+
 
             <v-dialog v-model="dialog" max-width="290">
                 <v-card>
@@ -68,6 +81,7 @@ export default {
         return {
             dialog: false,
             editPlace: false,
+            totalSize: 0,
             id : this.$route.params.id,
             place: []
         };
@@ -106,7 +120,10 @@ export default {
                     console.log('지점 삭제 실패');
                 }
             )
-
+        },
+        addAccount() {
+            var id = this.id;
+            this.$router.push("/addAccount/"+id);
         }
        
     },

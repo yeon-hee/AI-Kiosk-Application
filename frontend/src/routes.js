@@ -1,4 +1,4 @@
-import SaveFace from "./views/SaveFace.vue";
+import AddAccount from "./views/AddAccount.vue";
 import Home from "./views/Home.vue";
 import store from "./store";
 import AdminPage from "./components/admin/Admin.vue";
@@ -21,9 +21,9 @@ export default [
         component : AdminPage
     },
     {
-        path : '/home',
-        name : 'SaveFace',
-        component : SaveFace
+        path : '/addAccount/:id',
+        name : 'AddAccount',
+        component : AddAccount
     },
     {
         path: "/logout",
