@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = { "*" })
 @RestController
+@RequestMapping("/account")
 public class AccountController {
 
     static Logger logger = LoggerFactory.getLogger(AccountController.class);

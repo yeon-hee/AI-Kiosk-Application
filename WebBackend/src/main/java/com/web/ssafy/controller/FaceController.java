@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/face")
 public class FaceController {
 
     @RequestMapping(value = "/setFace", method = RequestMethod.PUT)
