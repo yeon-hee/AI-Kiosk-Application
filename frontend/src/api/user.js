@@ -13,6 +13,16 @@ function login(email, password, success, fail) {
       .catch(fail);
 }
 
+function deleteUser(email, success, fail) {
+  axios.delete(API_URL+'/account/delete', {
+      params: {
+          email: email
+      }
+    })
+    .then(success)
+    .catch(fail);
+}
+
 function addUser(email, name, phone, authority, photo, place, success, fail) {
     const body = {
         email: email,
@@ -34,4 +44,4 @@ function getAccountList(success, fail) {
     .catch(fail);
 }
 
-export { addUser, login,getAccountList };
+export { addUser, login,getAccountList,deleteUser };

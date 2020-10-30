@@ -44,11 +44,25 @@
                             <span id="address">{{user.email}}</span>
                             <span id="phone">{{user.phone}}</span>
                         </div>
-                        <div style="float: right; margin-top:10px;">
-                            <button @click="placeDetail(index)"><v-icon>keyboard_arrow_right</v-icon></button>
+                        <div style="float: right; margin: 10px 8px 0 0;">
+                            <button @click="clickDelete(index)"><v-icon size="20" color="rgb(192,0,0)">delete</v-icon></button>
                         </div>
                 </div>
             </div>
+
+            <v-dialog v-model="accountDelete" max-width="290">
+                <v-card>
+                   <br><br>
+                    <v-card-text>
+                        정말로 삭제 하시겠습니까?
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="error" text @click="deleteAccount">네</v-btn>
+                        <v-btn color="error" text @click="accountDelete = false">아니요</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 
             <v-dialog v-model="dialog" max-width="290">
                 <v-card>
@@ -89,17 +103,20 @@ import EditPlace from "../../views/EditPlace";
 import {getPlace} from '../../api/place.js';
 import {deletePlace} from '../../api/place.js';
 import {getAccountList} from '../../api/user.js';
+import {deleteUser} from '../../api/user.js';
 
 export default {
     data() {
         return {
+            accountDelete: false,
             dialog: false,
             editPlace: false,
             totalSize: 0,
             id : this.$route.params.id,
             place: [],
             users: [],
-            status: []
+            status: [],
+            deleteIndex: ""
         };
     },
     components: {
@@ -154,6 +171,26 @@ export default {
         addAccount() {
             var id = this.id;
             this.$router.push("/addAccount/"+id);
+        },
+        clickDelete(index){
+            this.accountDelete = true;
+            this.deleteIndex = index;
+        },
+        deleteAccount() { // 회원 삭제
+
+            var email = this.users[this.deleteIndex].email;
+            deleteUser(
+                email,
+                function(success){
+                    console.log('회원 삭제 성공');
+                    alert('정상적으로 삭제되었습니다.');
+                    location.reload();
+                },
+                function(fail){
+                    console.log('회원 삭제 실패');
+                }
+            )
+
         }
        
     },
