@@ -1,5 +1,5 @@
 import AddAccount from "./views/AddAccount.vue";
-import Home from "./views/Home.vue";
+import Home from "./views/home.vue";
 import store from "./store";
 import AdminPage from "./components/admin/Admin.vue";
 import PlaceDetail from "./components/admin/PlaceDetail.vue";
