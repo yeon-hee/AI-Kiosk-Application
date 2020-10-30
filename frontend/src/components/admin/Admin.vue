@@ -91,7 +91,7 @@ export default {
 
 #address{
     color:rgb(190,190,190);
-    font-size:13px;
+    font-size:12px;
     padding-left : 3px;
 }
 #name{

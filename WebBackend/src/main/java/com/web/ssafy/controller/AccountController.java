@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
@@ -33,6 +34,19 @@ public class AccountController {
     @Autowired
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
+    }
+
+    @GetMapping("/getAccountList")
+    @ApiOperation(value = "회원 전체 조회")
+    public List<Account> getList() throws Exception {
+        logger.info("login account");
+        List<Account> result = null;
+        try {
+            result = accountService.getAccountList();
+        }catch (RuntimeException e){ 
+            logger.error(e.toString());
+        }
+        return result;
     }
 
     @GetMapping("/login")

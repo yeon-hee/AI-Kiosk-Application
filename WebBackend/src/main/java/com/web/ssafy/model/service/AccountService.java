@@ -5,6 +5,8 @@ import com.web.ssafy.model.repo.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 @Service
@@ -20,6 +22,10 @@ public class AccountService {
 
     public Account getByEmail(String email) {
         return accountRepo.findByEmail(email);
+    }
+
+    public List<Account> getAccountList() {
+        return accountRepo.findAll();
     }
 
     public Account update(Account account) {

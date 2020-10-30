@@ -28,4 +28,10 @@ function addUser(email, name, phone, authority, photo, place, success, fail) {
       .catch(fail);
 }
 
-export { addUser, login };
+function getAccountList(success, fail) {
+  axios.get(API_URL+'/account/getAccountList')
+    .then(success)
+    .catch(fail);
+}
+
+export { addUser, login,getAccountList };

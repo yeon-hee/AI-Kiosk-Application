@@ -55,6 +55,8 @@ import {addUser} from "../api/user.js";
 import {API_ID} from "../config/index.js";
 import {API_KEY} from "../config/index.js";
 import HNav from "../components/common/HNav";
+import firebase from 'firebase/app';
+import 'firebase/storage';
 
 export default {
     name: "app",
@@ -83,6 +85,7 @@ export default {
                     phone: ""
                 }
             },
+            uploadedImageUrl: ""
         };
     },
     mounted() {
@@ -108,6 +111,11 @@ export default {
             formData.append("apiKey",API_KEY);
             formData.append("faceId",this.user.email); // 이메일
             formData.append("file",this.imageFile);
+            var fileName = this.user.email;
+
+            var storageRef = firebase.storage().ref("photos/"+fileName).put(this.imageFile); // firebase
+            console.log(storageRef);
+            console.log('이미지 업로드 완료');
 
             saveFace(
                 formData,
@@ -125,12 +133,12 @@ export default {
                 this.user.name,
                 this.user.phone,
                 this.user.authority,
-                this.user.photo,
+                this.user.email, 
                 this.user.place,
                 function(success){
                     console.log('회원 추가 성공');
                     alert('회원이 등록되었습니다.');
-                    this.$router.push("/adminMenu/detail/" + this.$route.params.id);
+                    vm.$router.push("/adminMenu/detail/" + vm.$route.params.id);
                 },
                 function(fail){
                     console.log('회원 추가 실패');

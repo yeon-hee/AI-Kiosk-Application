@@ -33,9 +33,22 @@
                 </button>
             </div>
             <div style="clear: both;"></div>
-            <v-divider></v-divider>
+            <v-divider></v-divider><br><br>
 
-
+            <div v-for="(user, index) in users" :key="user.email">
+                <div class="box">
+                        <!-- 이미지 위치-->
+                        <div style="float: left; margin-left: 30px;">
+                            <span id="name">{{user.name}}</span>
+                            <span id="authority">{{status[index]}}</span><br>
+                            <span id="address">{{user.email}}</span>
+                            <span id="phone">{{user.phone}}</span>
+                        </div>
+                        <div style="float: right; margin-top:10px;">
+                            <button @click="placeDetail(index)"><v-icon>keyboard_arrow_right</v-icon></button>
+                        </div>
+                </div>
+            </div>
 
             <v-dialog v-model="dialog" max-width="290">
                 <v-card>
@@ -75,6 +88,7 @@ import HNav from "../../components/common/HNav";
 import EditPlace from "../../views/EditPlace";
 import {getPlace} from '../../api/place.js';
 import {deletePlace} from '../../api/place.js';
+import {getAccountList} from '../../api/user.js';
 
 export default {
     data() {
@@ -83,7 +97,9 @@ export default {
             editPlace: false,
             totalSize: 0,
             id : this.$route.params.id,
-            place: []
+            place: [],
+            users: [],
+            status: []
         };
     },
     components: {
@@ -102,8 +118,22 @@ export default {
             function(fail){
                 console.log('지점 상세 조회 실패');
             }
-        )
+        ),
 
+        getAccountList(
+            function(success){
+                vm.users = success.data;
+                for(var i=0; i<success.data.length; i++){
+                    if(success.data[i].authority == 3) vm.status.push("사원");
+                    else if(success.data[i].authority == 2) vm.status.push("매니저");
+                }
+                vm.totalSize = success.data.length;
+                console.log('회원 전체 조회 성공');
+            },
+            function(fail){
+                console.log('회원 전체 조회 실패');
+            }
+        )
     },
     methods: {
         deletePlace() {
@@ -131,7 +161,16 @@ export default {
 </script>
 
 <style>
-
+#authority {
+    font-size: 11px;    
+    color: rgb(180,180,180);
+    margin-left: 13px;
+}
+#phone {
+    font-size: 11px;    
+    color: rgb(180,180,180);
+    margin-left: 13px;
+}
 #detail {
     font-size:18px; 
     margin-left: 10px;
