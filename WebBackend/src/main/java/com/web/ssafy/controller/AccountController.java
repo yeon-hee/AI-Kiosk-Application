@@ -35,6 +35,23 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @GetMapping("/login")
+    @ApiOperation(value = "로그인")
+    public Account login(@RequestParam String email, @RequestParam String password) throws Exception {
+        logger.info("login account");
+        Account result = null;
+        try {
+            result = accountService.getByEmail(email);
+            System.out.println(result.getPassword());
+            if(!result.getPassword().equals(password)) {
+                throw new Exception("비밀번호가 일치하지 않습니다.");
+            }
+        }catch (RuntimeException e){ 
+            logger.error(e.toString());
+        }
+        return result;
+    }
+
     @GetMapping("/accountInfo")
     @ApiOperation(value = "이메일로 이름 검색")
     public Account accountInfo(@RequestParam String email) {
@@ -45,7 +62,6 @@ public class AccountController {
         } catch (RuntimeException e) {
             logger.error(e.toString());
         }
-
         return result;
     }
 

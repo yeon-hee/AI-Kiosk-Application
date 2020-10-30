@@ -7,6 +7,8 @@ import com.web.ssafy.model.repo.PlaceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 @Service
@@ -15,6 +17,10 @@ public class PlaceService {
 
     @Autowired
     PlaceRepo placeRepo;
+
+    public List<Place> getAll() {
+        return placeRepo.findAll();
+    }
 
     public Place save(Place place) {
         return placeRepo.save(place);
