@@ -27,7 +27,7 @@ public class AccountService {
     public List<Account> getAccountList() {
         return accountRepo.findAll();
     }
-
+   
     public Account update(Account account) {
         Account before = this.getByEmail(account.getEmail());
         if (!account.getPassword().equals("")) before.setPassword(account.getPassword());

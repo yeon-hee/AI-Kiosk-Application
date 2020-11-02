@@ -44,4 +44,14 @@ function getAccountList(success, fail) {
     .catch(fail);
 }
 
-export { addUser, login,getAccountList,deleteUser };
+function getPlaceAccount(place, success, fail) {
+  axios.get(API_URL+'/account/getPlaceAccount', {
+      params: {
+        place: place
+      }
+    })
+    .then(success)
+    .catch(fail);
+}
+
+export { addUser, login,getAccountList,deleteUser,getPlaceAccount };

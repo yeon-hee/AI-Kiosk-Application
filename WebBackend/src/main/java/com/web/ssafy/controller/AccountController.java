@@ -1,6 +1,7 @@
 package com.web.ssafy.controller;
 
 import com.web.ssafy.model.dto.Account;
+import com.web.ssafy.model.dto.Place;
 import com.web.ssafy.model.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -49,6 +51,27 @@ public class AccountController {
         return result;
     }
 
+    @GetMapping("/getPlaceAccount")
+    @ApiOperation(value = "해당 지점 회원 조회")
+    public List<Account> getPlaceAccount(@RequestParam int place) throws Exception {
+        logger.info("place account");
+        List<Account> resultAll = null;
+        List<Account> result = new ArrayList<>();
+
+        try {
+            resultAll = accountService.getAccountList();
+            for(int i=0;i<resultAll.size();i++){
+                Place placeInfo = resultAll.get(i).getPlace();
+                if(placeInfo.getId() == place) {
+                    result.add(resultAll.get(i));
+                }
+            }
+        }catch (RuntimeException e){ 
+            logger.error(e.toString());
+        }
+        return result;
+    }
+
     @GetMapping("/login")
     @ApiOperation(value = "로그인")
     public Account login(@RequestParam String email, @RequestParam String password) throws Exception {
@@ -56,6 +79,7 @@ public class AccountController {
         Account result = null;
         try {
             result = accountService.getByEmail(email);
+            if(result==null) throw new Exception("해당 회원이 존재하지 않습니다.");
             System.out.println(result.getPassword());
             if(!result.getPassword().equals(password)) {
                 throw new Exception("비밀번호가 일치하지 않습니다.");

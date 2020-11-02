@@ -38,9 +38,11 @@
             <div v-for="(user, index) in users" :key="user.email">
                 <div class="box">
                         <!-- 이미지 위치-->
-                        <div style="float: left; margin-left: 30px;">
+                        <img :src="user.photo" id="userFace"> 
+                        <div style="float: left; margin-left: 12px;">
                             <span id="name">{{user.name}}</span>
-                            <span id="authority">{{status[index]}}</span><br>
+                            <span id="authority" v-if="user.authority == 2">매니저</span>
+                            <span id="authority" v-if="user.authority == 3">회원</span><br>
                             <span id="address">{{user.email}}</span>
                             <span id="phone">{{user.phone}}</span>
                         </div>
@@ -103,7 +105,10 @@ import EditPlace from "../../views/EditPlace";
 import {getPlace} from '../../api/place.js';
 import {deletePlace} from '../../api/place.js';
 import {getAccountList} from '../../api/user.js';
+import {getPlaceAccount} from '../../api/user.js';
 import {deleteUser} from '../../api/user.js';
+import firebase from 'firebase/app';
+import 'firebase/storage';
 
 export default {
     data() {
@@ -115,8 +120,7 @@ export default {
             id : this.$route.params.id,
             place: [],
             users: [],
-            status: [],
-            deleteIndex: ""
+            deleteIndex: "",
         };
     },
     components: {
@@ -137,14 +141,15 @@ export default {
             }
         ),
 
-        getAccountList(
+        getPlaceAccount(
+            this.id,
             function(success){
-                vm.users = success.data;
+                console.log(success);
                 for(var i=0; i<success.data.length; i++){
-                    if(success.data[i].authority == 3) vm.status.push("사원");
-                    else if(success.data[i].authority == 2) vm.status.push("매니저");
+                    if(success.data[i].authority == 1) continue;
+                    vm.users.push(success.data[i]);
+                    vm.totalSize++;
                 }
-                vm.totalSize = success.data.length;
                 console.log('회원 전체 조회 성공');
             },
             function(fail){
@@ -177,12 +182,12 @@ export default {
             this.deleteIndex = index;
         },
         deleteAccount() { // 회원 삭제
-
             var email = this.users[this.deleteIndex].email;
             deleteUser(
                 email,
                 function(success){
                     console.log('회원 삭제 성공');
+                    firebase.storage().ref("photos/"+email).delete(); // 파이어베이스에서 사진 삭제
                     alert('정상적으로 삭제되었습니다.');
                     location.reload();
                 },
@@ -198,9 +203,17 @@ export default {
 </script>
 
 <style>
+#userFace {
+    float: left;
+    width: 50px; 
+    height: 44px;
+    margin-left: 6px;
+    border-radius: 70%;
+    object-fit: cover;
+}
 #authority {
-    font-size: 11px;    
-    color: rgb(180,180,180);
+    font-size: 10px;    
+    color: rgb(210,210,210);
     margin-left: 13px;
 }
 #phone {

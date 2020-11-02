@@ -112,28 +112,39 @@ export default {
             formData.append("faceId",this.user.email); // 이메일
             formData.append("file",this.imageFile);
             var fileName = this.user.email;
-
-            var storageRef = firebase.storage().ref("photos/"+fileName).put(this.imageFile); // firebase
-            console.log(storageRef);
-            console.log('이미지 업로드 완료');
-
+            
             saveFace(
                 formData,
                 function(success) {
-                    console.log(success);
+                    var Storage = firebase.storage().ref("photos/"+fileName).put(vm.imageFile)
+                        .then((snapshot) => {
+                            vm.savePhoto();
+                        }); 
                 },
                 function(fail) {
                     console.log(fail);
                     console.log("얼굴 등록 실패");
                 }
             );
+        },
+        savePhoto() {
+            const vm = this;
+            var fileName = this.user.email;
+            firebase.storage().ref("photos/"+fileName).getDownloadURL()
+                .then((url) => {
+                    vm.user.photo = url;
+                    vm.addUser();
+            })
+        },
+        addUser() {
+            const vm = this;
 
             addUser(
                 this.user.email,
                 this.user.name,
                 this.user.phone,
                 this.user.authority,
-                this.user.email, 
+                this.user.photo, 
                 this.user.place,
                 function(success){
                     console.log('회원 추가 성공');

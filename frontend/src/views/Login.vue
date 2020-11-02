@@ -43,6 +43,7 @@ export default {
                 this.user.email,
                 this.user.password,
                 function(success){
+                    console.log(success);
                     scope.$store.commit("setIsSigned", true);
                     scope.$store.commit("setUserEmail", success.data.email);
                     if(success.data.authority==1){ // 관리자일 경우
