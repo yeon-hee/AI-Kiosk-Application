@@ -3,6 +3,7 @@ import Home from "./views/Home.vue";
 import store from "./store";
 import AdminPage from "./components/admin/Admin.vue";
 import PlaceDetail from "./components/admin/PlaceDetail.vue";
+import LogPage from "./views/LogPage.vue";
 
 export default [
     {
@@ -14,6 +15,11 @@ export default [
         path : '/adminMenu/detail/:id',
         name : 'PlaceDetail',
         component : PlaceDetail
+    },
+    {
+        path : '/logMenu',
+        name : 'LogPage',
+        component : LogPage
     },
     {
         path : '/adminMenu',

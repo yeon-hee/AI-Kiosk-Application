@@ -163,12 +163,15 @@ export default {
             this.captures.push(canvas.toDataURL("image/png"));
             this.userImage = this.captures[this.captures.length-1];
             var imgurl = canvas.toDataURL("image/png");
-
+            console.log('여기');
+            console.log(imgurl);
             var canvasBin = atob(imgurl.split(',')[1]);
+            console.log(canvasBin);
             var array = [];
             for(var i = 0; i<canvasBin.length; i++){
                 array.push(canvasBin.charCodeAt(i));
             }
+            console.log(array);
             this.imageFile = new Blob([new Uint8Array(array)], {type: 'image/png'}); // Blob 생성
         },
         save() {

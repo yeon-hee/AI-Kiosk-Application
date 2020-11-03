@@ -8,7 +8,7 @@
             </v-toolbar-title>
             <v-toolbar-title id="header2">
                 <router-link id="link-to-home" to="/" @click="home">HOME</router-link>
-                <router-link id="link-to-entrance" to="/sell">출입기록조회</router-link>
+                <router-link id="link-to-entrance" to="/logMenu">출입기록조회</router-link>
                 <router-link id="link-to-admin" to="/adminMenu" v-if="$store.state.isAdmin">관리자메뉴</router-link>
                 <router-link id="link-to-board" to="/logout">공지사항</router-link>
             </v-toolbar-title>

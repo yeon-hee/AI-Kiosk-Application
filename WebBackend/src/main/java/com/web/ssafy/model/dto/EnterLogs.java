@@ -23,5 +23,5 @@ public class EnterLogs {
 
     String accountName;
     String accountEmail;
-    String placeName;
+    String placeId;
 }

@@ -47,6 +47,7 @@
                             <span id="phone">{{user.phone}}</span>
                         </div>
                         <div style="float: right; margin: 10px 8px 0 0;">
+                            <button @click="clickUpdate(index)"><v-icon size="20" color="rgb(255,193,7)">create</v-icon></button>
                             <button @click="clickDelete(index)"><v-icon size="20" color="rgb(192,0,0)">delete</v-icon></button>
                         </div>
                 </div>
