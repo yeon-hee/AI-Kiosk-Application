@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "861683978729",
+    "firebase_url": "https://whoami-279bc.firebaseio.com",
+    "project_id": "whoami-279bc",
+    "storage_bucket": "whoami-279bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861683978729:android:fe1682f5e3c6678efa3b78",
+        "android_client_info": {
+          "package_name": "com.whoami"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861683978729-e56a1trtv08p0hgr72lql3ek1p6o0i0h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqI1x7DfT7FWoclpQv7hbkB17JM0QFkJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861683978729-e56a1trtv08p0hgr72lql3ek1p6o0i0h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
