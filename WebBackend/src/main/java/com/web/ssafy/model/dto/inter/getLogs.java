@@ -3,6 +3,7 @@ package com.web.ssafy.model.dto.inter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.ssafy.model.dto.Account;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public interface getLogs {

@@ -12,4 +12,16 @@ function getLogList(placeName, success, fail) {
     .catch(fail);
 }
 
-export { getLogList };
+function getLogPeriod(placeName, startDate, endDate, success, fail) {
+    axios.get(API_URL+'/log/getLogPeriod', {
+      params: {
+          placeName: placeName,
+          startDate: startDate,
+          endDate: endDate
+      }
+    })
+      .then(success)
+      .catch(fail);
+}
+
+export { getLogList,getLogPeriod };
