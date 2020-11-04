@@ -28,7 +28,7 @@ export default class Camera extends PureComponent {
           onFacesDetected={this.faceDetect}
         />
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('GuestVoice')} style={styles.capture}>
             <Text style={{ fontSize: 14 }}> SNAP </Text>
           </TouchableOpacity>
         </View>
