@@ -38,6 +38,31 @@ function addUser(email, name, phone, authority, photo, place, success, fail) {
       .catch(fail);
 }
 
+function updateUser(email, name, phone, authority, photo, place, success, fail) {
+  const body = {
+      email: email,
+      name: name,
+      phone: phone,
+      authority: authority,
+      photo: photo,
+      place: place
+  };
+
+  axios.put(API_URL+"/account/update", body)
+    .then(success)
+    .catch(fail);
+}
+
+function getAccountById(id,success, fail) {
+  axios.get(API_URL+'/account/getAccountById', {
+    params: {
+      id: id
+    }
+  })
+    .then(success)
+    .catch(fail);
+}
+
 function getAccountList(success, fail) {
   axios.get(API_URL+'/account/getAccountList')
     .then(success)
@@ -54,4 +79,4 @@ function getPlaceAccount(place, success, fail) {
     .catch(fail);
 }
 
-export { addUser, login,getAccountList,deleteUser,getPlaceAccount };
+export { addUser, login,getAccountList,deleteUser,getPlaceAccount,getAccountById,updateUser };

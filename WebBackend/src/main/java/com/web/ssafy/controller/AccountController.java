@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
 
@@ -45,7 +46,7 @@ public class AccountController {
         List<Account> result = null;
         try {
             result = accountService.getAccountList();
-        }catch (RuntimeException e){ 
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
         return result;
@@ -60,13 +61,13 @@ public class AccountController {
 
         try {
             resultAll = accountService.getAccountList();
-            for(int i=0;i<resultAll.size();i++){
+            for (int i = 0; i < resultAll.size(); i++) {
                 Place placeInfo = resultAll.get(i).getPlace();
-                if(placeInfo.getId() == place) {
+                if (placeInfo.getId() == place) {
                     result.add(resultAll.get(i));
                 }
             }
-        }catch (RuntimeException e){ 
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
         return result;
@@ -79,15 +80,31 @@ public class AccountController {
         Account result = null;
         try {
             result = accountService.getByEmail(email);
-            if(result==null) throw new Exception("해당 회원이 존재하지 않습니다.");
+            if (result == null)
+                throw new Exception("해당 회원이 존재하지 않습니다.");
             System.out.println(result.getPassword());
-            if(!result.getPassword().equals(password)) {
+            if (!result.getPassword().equals(password)) {
                 throw new Exception("비밀번호가 일치하지 않습니다.");
             }
-        }catch (RuntimeException e){ 
+        } catch (RuntimeException e) {
             logger.error(e.toString());
         }
         return result;
+    }
+
+    @GetMapping("/getAccountById")
+    @ApiOperation(value = "아이디로 이름 검색")
+    public Account accountInfo(@RequestParam long id) {
+        logger.info("get account by id");
+        Optional<Account> result = null;
+        Account answer = null;
+        try {
+            result = accountService.getById(id);
+            answer = result.get();
+        } catch (RuntimeException e) {
+            logger.error(e.toString());
+        }
+        return answer;
     }
 
     @GetMapping("/accountInfo")

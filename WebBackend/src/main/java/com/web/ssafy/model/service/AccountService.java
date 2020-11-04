@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -24,15 +25,19 @@ public class AccountService {
         return accountRepo.findByEmail(email);
     }
 
+    public Optional<Account> getById(long id) {
+        return accountRepo.findById(id);
+    }
+
     public List<Account> getAccountList() {
         return accountRepo.findAll();
     }
    
     public Account update(Account account) {
         Account before = this.getByEmail(account.getEmail());
-        if (!account.getPassword().equals("")) before.setPassword(account.getPassword());
-        if (!account.getPhone().equals("")) before.setPhone(account.getPhone());
         if (!account.getName().equals("")) before.setName(account.getName());
+        if (!account.getEmail().equals("")) before.setEmail(account.getEmail());
+        if (!account.getPhone().equals("")) before.setPhone(account.getPhone());
         before.setAuthority(account.getAuthority());
 
         return before;

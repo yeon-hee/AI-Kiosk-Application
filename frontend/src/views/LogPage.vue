@@ -14,7 +14,7 @@
                         <v-col cols="2"></v-col>
                         <v-col cols="2">지점</v-col>
                         <v-col cols="6">
-                            <v-select :items="places" label="지점 선택" single-line></v-select>
+                            <v-select :items="places" label="지점 선택" single-line v-model="selectedPlace"></v-select>
                         </v-col>
                         <v-col cols="2"></v-col>
                     </v-row>
@@ -53,6 +53,14 @@
                 </div>
                
             </div><br><br>
+
+            <v-card>
+                <v-card-title>출입 기록
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+                </v-card-title>
+                <v-data-table :headers="headers" :items="logList" :search="search" class="elevation-1"></v-data-table>
+            </v-card><br><br>
         </div>
     </div>
 </template>
@@ -61,16 +69,35 @@
 
 import HNav from "../components/common/HNav";
 import {getPlaceList} from "../api/place.js";
+import {getLogList} from "../api/log.js";
 
 export default {
     name: "app",
     data() {
         return {
+            selectedPlace: {},
             places: [],
             select: "",
             startDate: "",
             endDate: "",
-            searchName: ""
+            searchName: "",
+            logList: [], // 로그 들어있는 리스트
+            search: '',
+            headers: [
+                {
+                    text: '지점',
+                    align: 'start',
+                    sortable: false,
+                    value: 'PlaceName',
+                },
+                { text: '이름', value: 'AccountName' },
+                { text: '출입 시간', value: 'time' },
+            ],
+            LogData : {
+                PlaceName: "", 
+                AccountName: "", 
+                time: ""
+            }
         };
     },
     components: {
@@ -91,12 +118,13 @@ export default {
                 console.log(vm.places);
             },
             function(fail){
-
+                console.log('지점 조회 실패');
             },
         )
     },
     methods: {
         submitForm() {
+            const vm = this;
         
             if(this.startDate != "" && this.endDate == ""){
                 document.getElementById("notice").value = '종료 날짜를 채워주세요.';
@@ -112,6 +140,30 @@ export default {
             }
 
             // 찾기 - 날짜 , 이름 
+            getLogList(
+                this.selectedPlace,
+                function(success){
+                    for(var i=0;i<success.data.length;i++){
+                        var Data = {};
+                        Data.PlaceName = success.data[i].placeName;
+                        Data.AccountName = success.data[i].accountName;
+                        //Data.time = success.data[i].time;
+                        var logTime = success.data[i].time.split("T")[0]; 
+                        logTime += " ";
+                        var string = success.data[i].time.split("T")[1];
+                        logTime += string.split(":")[0];
+                        logTime += ":";
+                        logTime += string.split(":")[1];
+                        Data.time = logTime;
+                        //console.log(Data);
+                        vm.logList.push(Data);
+                    }
+                    console.log('로그 조회 성공');
+                },
+                function(fail){
+                    console.log('로그 조회 실패');
+                }
+            )
             
    
         }
