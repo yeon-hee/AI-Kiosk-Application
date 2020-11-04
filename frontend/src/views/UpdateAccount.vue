@@ -4,7 +4,7 @@
         <div id="placeList">
             <div>
                 <v-icon style="margin-bottom:9px;">person</v-icon>
-                <span id="detail">직원 등록</span>
+                <span id="detail">직원 정보 수정</span>
             </div>
             <v-divider></v-divider><br><br>
             <div class="form">
@@ -14,20 +14,17 @@
                             <video ref="video" id="video" width="100%;" height="500px;" autoplay></video>
                             <div id="button">
                                 <v-btn id="snap" style="margin-right:5px;" color="error" v-on:click="capture()">캡처</v-btn>
-                                <!-- <v-btn id="snap" color="error" v-on:click="save()">저장</v-btn> -->
-                                <!-- <button id="snap" v-on:click="recognize()">인식</button> -->
                             </div>
                         </v-card>
                     </v-col>
                     <v-col cols="6">
                         <v-card style="padding: 17px;">
                             <div style="margin-bottom: 17px;">
-                                <img src="../../public/images/defaultUser.png" v-if="isImage == false" style="height:120px;">
-                                <img v-bind:src="userImage" v-else style="height:120px; width:120px;">
+                                <img v-bind:src="userImage" style="height:120px; width:120px;">
                             </div>
-                            <v-text-field label="이름" v-model="user.name"></v-text-field>
-                            <v-text-field label="이메일" v-model="user.email"></v-text-field>
-                            <v-text-field label="연락처" v-model="user.phone"></v-text-field>
+                            <v-text-field label="이름" v-model="user.name" :placeholder="oldUser.name"></v-text-field>
+                            <v-text-field label="이메일" disabled v-model="oldUser.email"></v-text-field>
+                            <v-text-field label="연락처" v-model="user.phone" :placeholder="oldUser.phone"></v-text-field>
                             <v-radio-group v-model="row" row>
                                 <v-radio label="회원" :value="3"></v-radio>
                                 <v-radio label="매니저" :value="2"></v-radio>
@@ -35,7 +32,7 @@
                             <div style="clear: both;"></div>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary" @click="addAccount">추가</v-btn>
+                                <v-btn color="primary" @click="updateAccount">수정</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -56,22 +53,39 @@ import {API_ID} from "../config/index.js";
 import {API_KEY} from "../config/index.js";
 import HNav from "../components/common/HNav";
 import firebase from 'firebase/app';
+import {getAccountById} from "../api/user.js";
+import {updateUser} from "../api/user.js";
 import 'firebase/storage';
 
 export default {
     name: "app",
     data() {
         return {
+            userId: this.$route.params.user_id,
+            placeId: this.$route.params.place_id,
             imageFile: {},
             name: "",
             fileName: "",
             video: {},
             canvas: [],
             captures: [],
-            row: 3,
+            row: 0,
             account: "user",
             isImage: false,
             userImage: [],
+            oldUser: {
+                email: "",
+                name: "",
+                phone: "",
+                authority: "",
+                photo: "",
+                place: {
+                    address: "",
+                    id: "",
+                    name: "",
+                    phone: ""
+                }
+            },
             user: {
                 email: "",
                 name: "",
@@ -80,12 +94,13 @@ export default {
                 photo: "",
                 place: {
                     address: "",
-                    id: this.$route.params.id,
+                    id: "",
                     name: "",
                     phone: ""
                 }
             },
-            uploadedImageUrl: ""
+            uploadedImageUrl: "",
+            captured: false,
         };
     },
     mounted() {
@@ -97,35 +112,58 @@ export default {
             });
         }
     },
+    created() {
+        const vm = this;
+
+        getAccountById(
+            this.userId,
+            function(success){
+                vm.oldUser = success.data;
+                vm.row = vm.oldUser.authority;
+                vm.userImage = vm.oldUser.photo;
+                vm.user.email = vm.oldUser.email;
+            },
+            function(fail){
+
+            }
+        )
+
+    },
     components: {
         HNav
     },
     methods: {
-        addAccount() { // 회원 추가
+        updateAccount() { // 회원 변경
             const vm = this;
             this.user.authority = this.row; 
             this.user.photo = this.userImage; // 사진 저장
-            // face recognition - set
-            let formData = new FormData();
-            formData.append("apiId",API_ID);
-            formData.append("apiKey",API_KEY);
-            formData.append("faceId",this.user.email); // 이메일
-            formData.append("file",this.imageFile);
-            var fileName = this.user.email;
-            
-            saveFace(
-                formData,
-                function(success) {
-                    var Storage = firebase.storage().ref("photos/"+fileName).put(vm.imageFile)
-                        .then((snapshot) => {
-                            vm.savePhoto();
-                        }); 
-                },
-                function(fail) {
-                    console.log(fail);
-                    console.log("얼굴 등록 실패");
-                }
-            );
+
+            if(this.captured == true){ // 캡쳐 했을 경우만
+                // face recognition - set
+                let formData = new FormData();
+                formData.append("apiId",API_ID);
+                formData.append("apiKey",API_KEY);
+                formData.append("faceId",this.user.email); // 이메일
+                formData.append("file",this.imageFile);
+                var fileName = this.user.email;
+                
+                saveFace(
+                    formData,
+                    function(success) {
+                        var Storage = firebase.storage().ref("photos/"+fileName).put(vm.imageFile)
+                            .then((snapshot) => {
+                                vm.savePhoto();
+                            }); 
+                    },
+                    function(fail) {
+                        console.log(fail);
+                        console.log("얼굴 등록 실패");
+                    }
+                );
+            }
+            else {
+                vm.updateUser();
+            }
         },
         savePhoto() {
             const vm = this;
@@ -133,45 +171,43 @@ export default {
             firebase.storage().ref("photos/"+fileName).getDownloadURL()
                 .then((url) => {
                     vm.user.photo = url;
-                    vm.addUser();
+                    console.log('업데이트 완료');
+                    vm.updateUser();
             })
         },
-        addUser() {
+        updateUser() {
             const vm = this;
 
-            addUser(
-                this.user.email,
+            updateUser(
+                this.oldUser.email,
                 this.user.name,
                 this.user.phone,
                 this.user.authority,
                 this.user.photo, 
                 this.user.place,
                 function(success){
-                    console.log('회원 추가 성공');
-                    alert('회원이 등록되었습니다.');
-                    vm.$router.push("/adminMenu/detail/" + vm.$route.params.id);
+                    console.log('회원 변경 성공');
+                    alert('회원이 변경되었습니다.');
+                    vm.$router.push("/adminMenu/detail/" + vm.$route.params.place_id);
                 },
                 function(fail){
-                    console.log('회원 추가 실패');
+                    console.log('회원 변경 실패');
                 }
             )
         },
         capture() {
+            this.captured = true;
             this.isImage = true;
             this.canvas = this.$refs.canvas;
             var context = this.canvas.getContext("2d").drawImage(this.video, 0, 0, 640, 480);
             this.captures.push(canvas.toDataURL("image/png"));
             this.userImage = this.captures[this.captures.length-1];
             var imgurl = canvas.toDataURL("image/png");
-            console.log('여기');
-            console.log(imgurl);
             var canvasBin = atob(imgurl.split(',')[1]);
-            console.log(canvasBin);
             var array = [];
             for(var i = 0; i<canvasBin.length; i++){
                 array.push(canvasBin.charCodeAt(i));
             }
-            console.log(array);
             this.imageFile = new Blob([new Uint8Array(array)], {type: 'image/png'}); // Blob 생성
         },
         save() {

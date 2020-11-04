@@ -24,4 +24,7 @@ public class EnterLogs {
     String accountName;
     String accountEmail;
     String placeName;
+    Long place;
+
 }
+

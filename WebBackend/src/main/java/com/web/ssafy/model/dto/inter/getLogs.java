@@ -10,4 +10,5 @@ public interface getLogs {
     String getAccountEmail();
     String getAccountName();
     String getPlaceName();
+    Long getPlace();
 }
