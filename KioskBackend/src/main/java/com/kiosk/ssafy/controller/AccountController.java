@@ -1,5 +1,6 @@
 package com.kiosk.ssafy.controller;
 
+import com.kiosk.ssafy.model.dto.Account;
 import com.kiosk.ssafy.model.dto.inter.AccountInfo;
 import com.kiosk.ssafy.model.dto.inter.AccountName;
 import com.kiosk.ssafy.model.service.AccountService;
@@ -43,16 +44,31 @@ public class AccountController {
 
     @GetMapping("/getAccountInfo")
     @ApiOperation(value = "이름으로 직원 조회")
-    public List<AccountInfo> getAccountInfo(@RequestParam String names){
+    public List<Account> getAccountInfo(@RequestParam long placeId, @RequestParam String names){
         logger.info("find employees");
-        List<AccountInfo> result = null;
+        List<Account> result = null;
         List<String> list = new ArrayList<>();
         try {
             StringTokenizer temp = new StringTokenizer(names, ",");
             while (temp.hasMoreTokens()){
                 list.add(temp.nextToken());
             }
-            result = accountService.findAccountInfo(list);
+            result = accountService.findAccountInfo(list, placeId); // account 들어있는
+            
+        }catch (RuntimeException e){
+            logger.error(e.toString());
+        }
+
+        return result;
+    }
+
+    @GetMapping("/SendMessage")
+    @ApiOperation(value = "호출된 직원에 메세지 전송")
+    public Account SendMessage(@RequestParam long accountId){
+        logger.info("send message");
+        Account result = null;
+        try {
+            result = accountService.SendMessage(accountId);
         }catch (RuntimeException e){
             logger.error(e.toString());
         }
