@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8081";
+const API_URL = "http://localhost:8081/web";
 
 function login(email, password, success, fail) {
     axios.get(API_URL+'/account/login', {
@@ -63,6 +63,16 @@ function getAccountById(id,success, fail) {
     .catch(fail);
 }
 
+function getAccountByEmail(email,success, fail) {
+  axios.get(API_URL+'/account/accountInfo', {
+    params: {
+      email: email
+    }
+  })
+    .then(success)
+    .catch(fail);
+}
+
 function getAccountList(success, fail) {
   axios.get(API_URL+'/account/getAccountList')
     .then(success)
@@ -79,4 +89,11 @@ function getPlaceAccount(place, success, fail) {
     .catch(fail);
 }
 
-export { addUser, login,getAccountList,deleteUser,getPlaceAccount,getAccountById,updateUser };
+export { addUser, 
+  login,
+  getAccountList,
+  deleteUser,
+  getPlaceAccount,
+  getAccountById,
+  updateUser,
+  getAccountByEmail };

@@ -1,5 +1,6 @@
 package com.web.ssafy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.web.ssafy.model.dto.Account;
@@ -20,6 +21,9 @@ public class PlaceController {
     static Logger logger = LoggerFactory.getLogger(PlaceController.class);
 
     private PlaceService placeService;
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     public PlaceController(PlaceService placeService) {
@@ -47,6 +51,32 @@ public class PlaceController {
         List<Place> result = null;
         try {
             result = placeService.getAll();
+        }catch (RuntimeException e){
+            logger.error(e.toString());
+        }
+        return result;
+    }
+
+    @GetMapping("/placeByAuth")
+    @ApiOperation(value = "영업점 전체 검색")
+    public List<Place> getPlaceByAuth(@RequestParam String email, @RequestParam int authority){
+        logger.info("get account list");
+        List<Place> resultAll = new ArrayList<>();
+        List<Place> result = new ArrayList<>();
+        try {
+            resultAll = placeService.getAll();
+            if(authority == 1){ // 어드민
+                result = resultAll;
+            }
+            else { // 매니저, 회원
+                Account account = accountService.getByEmail(email);
+                long placeId = account.getPlace().getId();
+                for(int i=0;i<resultAll.size();i++){
+                    if(resultAll.get(i).getId() == placeId){
+                        result.add(resultAll.get(i));
+                    }
+                }
+            }
         }catch (RuntimeException e){
             logger.error(e.toString());
         }

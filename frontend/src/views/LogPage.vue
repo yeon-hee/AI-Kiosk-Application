@@ -69,8 +69,10 @@
 
 import HNav from "../components/common/HNav";
 import {getPlaceList} from "../api/place.js";
+import {getPlaceByAuth} from "../api/place.js";
 import {getLogList} from "../api/log.js";
 import {getLogPeriod} from "../api/log.js";
+import {getAccountByEmail} from "../api/user.js";
 
 export default {
     name: "app",
@@ -98,7 +100,9 @@ export default {
                 PlaceName: "", 
                 AccountName: "", 
                 time: ""
-            }
+            },
+            userEmail: this.$store.state.user.email, // 유저 이메일
+            user: {},
         };
     },
     components: {
@@ -110,18 +114,31 @@ export default {
     created() {
         const vm = this;
 
-        getPlaceList(
+        getAccountByEmail(
+            this.userEmail,
             function(success){
-                console.log(success);
-                for(var i=0;i<success.data.length;i++){
-                    vm.places.push(success.data[i].name);
-                }
-                console.log(vm.places);
+                vm.user = success.data;
+                var email = vm.user.email;
+                var authority = vm.user.authority;
+                getPlaceByAuth(
+                    email,
+                    authority,
+                    function(success){
+                        for(var i=0; i<success.data.length;i++){
+                            console.log(success.data[i].name);
+                            vm.places.push(success.data[i].name);  
+                        }                      
+                    },
+                    function(fail){
+                        console.log('지점 조회 실패');
+                    },
+                )
             },
             function(fail){
-                console.log('지점 조회 실패');
-            },
+
+            }
         )
+
     },
     methods: {
         submitForm() {
@@ -140,6 +157,7 @@ export default {
                 if(this.startDate != "" && this.endDate != ""){ // 기간 조회
                     vm.logList= [];
                     getLogPeriod(
+                        vm.user.email,
                         this.selectedPlace,
                         this.startDate,
                         this.endDate,
@@ -167,6 +185,7 @@ export default {
                 else { // 지점으로 조회
                     vm.logList= [];
                     getLogList(
+                        vm.user.email,
                         this.selectedPlace,
                         function(success){
                             for(var i=0;i<success.data.length;i++){
