@@ -10,7 +10,8 @@ export default class Camera extends PureComponent {
     super(props);
     this.state = {
       takingPic : false,
-      flag : 0
+      flag : 0,
+      accountName : ""
     }
   }
   render() {
@@ -82,7 +83,7 @@ export default class Camera extends PureComponent {
         if(!res.data.result.id || res.data.result.id==="__no__match__") { // 인식실패
           this.checkGuest();
         } else { // 인식성공
-          this.enter(res);
+          this.enter(res.data.result.id);
         }
       },
       (error)=> {
@@ -98,23 +99,25 @@ export default class Camera extends PureComponent {
 
   }
 
-  enter = (res) => {
+  enter = (id) => {
     let data = {
-      accountEmail : res.data.result.id,
+      accountEmail : id,
       placeName : 0
     }
     // 로그 남기고 state 변화, 
     writeLog(data,
-      (response)=>{
+      (res)=>{
         this.setState({
           flag : 1,
-          accountName : response.data.accountName
+          accountName : res.data.accountName
         });
         setTimeout(()=>{
           this.setState({
-            takingPic : false
+            takingPic : false,
+            flag : 0,
+            accountName : ""
           });
-        }, 1500);
+        }, 2000);
       },
       (error)=> {
         console.log(error);
