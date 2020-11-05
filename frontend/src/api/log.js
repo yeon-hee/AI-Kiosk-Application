@@ -1,10 +1,11 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8081";
+const API_URL = "http://localhost:8081/web";
 
-function getLogList(placeName, success, fail) {
+function getLogList(email, placeName, success, fail) {
   axios.get(API_URL+'/log/getLogList', {
     params: {
+        email: email,
         placeName: placeName
     }
   })
@@ -12,4 +13,17 @@ function getLogList(placeName, success, fail) {
     .catch(fail);
 }
 
-export { getLogList };
+function getLogPeriod(email, placeName, startDate, endDate, success, fail) {
+    axios.get(API_URL+'/log/getLogPeriod', {
+      params: {
+          email: email,
+          placeName: placeName,
+          startDate: startDate,
+          endDate: endDate
+      }
+    })
+      .then(success)
+      .catch(fail);
+}
+
+export { getLogList,getLogPeriod };

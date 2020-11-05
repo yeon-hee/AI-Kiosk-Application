@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8081";
+const API_URL = "http://localhost:8081/web";
 
 function addplace(name, address, phone, success, fail) {
     const body = {
@@ -43,6 +43,17 @@ function getPlaceList(success, fail) {
       .catch(fail);
 }
 
+function getPlaceByAuth(email, authority, success, fail) {
+    axios.get(API_URL+'/place/placeByAuth', {
+        params: {
+            email: email,
+            authority: authority
+        }
+    })
+      .then(success)
+      .catch(fail);
+}
+
 function deletePlace(id, success, fail) {
     axios.delete(API_URL+'/place/delete', {
         params: {
@@ -53,4 +64,4 @@ function deletePlace(id, success, fail) {
       .catch(fail);
 }
 
-export { addplace,getPlaceList,getPlace,editPlace,deletePlace };
+export { addplace,getPlaceList,getPlace,editPlace,deletePlace,getPlaceByAuth };

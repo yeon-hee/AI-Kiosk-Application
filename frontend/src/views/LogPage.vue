@@ -33,7 +33,7 @@
                             <input type="text" disabled id="notice">
                         </v-col>
                     </v-row>
-                    <v-row align="center">
+                    <!-- <v-row align="center">
                         <v-col cols="2"></v-col>
                         <v-col cols="2">이름</v-col>
                         <v-col cols="6">
@@ -42,11 +42,11 @@
                             </div>
                         </v-col>
                         <v-col cols="2"></v-col>
-                    </v-row>
+                    </v-row> -->
                     <v-row align="center">
                         <v-col cols="5"></v-col>
-                        <v-col cols="2" style="text-align: center; margin-top:10px;">
-                            <v-btn color="primary" @click="submitForm" id="submit">제출</v-btn>
+                        <v-col cols="2" style="text-align: center;">
+                            <v-btn color="primary" @click="submitForm" id="submit">검색</v-btn>
                         </v-col>
                         <v-col cols="5"></v-col>
                     </v-row>
@@ -69,7 +69,10 @@
 
 import HNav from "../components/common/HNav";
 import {getPlaceList} from "../api/place.js";
+import {getPlaceByAuth} from "../api/place.js";
 import {getLogList} from "../api/log.js";
+import {getLogPeriod} from "../api/log.js";
+import {getAccountByEmail} from "../api/user.js";
 
 export default {
     name: "app",
@@ -97,7 +100,9 @@ export default {
                 PlaceName: "", 
                 AccountName: "", 
                 time: ""
-            }
+            },
+            userEmail: this.$store.state.user.email, // 유저 이메일
+            user: {},
         };
     },
     components: {
@@ -109,63 +114,101 @@ export default {
     created() {
         const vm = this;
 
-        getPlaceList(
+        getAccountByEmail(
+            this.userEmail,
             function(success){
-                console.log(success);
-                for(var i=0;i<success.data.length;i++){
-                    vm.places.push(success.data[i].name);
-                }
-                console.log(vm.places);
+                vm.user = success.data;
+                var email = vm.user.email;
+                var authority = vm.user.authority;
+                getPlaceByAuth(
+                    email,
+                    authority,
+                    function(success){
+                        for(var i=0; i<success.data.length;i++){
+                            console.log(success.data[i].name);
+                            vm.places.push(success.data[i].name);  
+                        }                      
+                    },
+                    function(fail){
+                        console.log('지점 조회 실패');
+                    },
+                )
             },
             function(fail){
-                console.log('지점 조회 실패');
-            },
+
+            }
         )
+
     },
     methods: {
         submitForm() {
             const vm = this;
-        
-            if(this.startDate != "" && this.endDate == ""){
+            if(this.startDate != "" && this.endDate == ""){ // 하나가 빌 경우
                 document.getElementById("notice").value = '종료 날짜를 채워주세요.';
             }
             else if(this.startDate == "" && this.endDate != ""){
                 document.getElementById("notice").value = '시작 날짜를 채워주세요.';
             }
-            else if(this.startDate > this.endDate){
+            else if(this.startDate > this.endDate){ // 기간 오류
                 document.getElementById("notice").value = '기간을 다시 설정해주세요.';
             }
             else {
                 document.getElementById("notice").value = '';
-            }
-
-            // 찾기 - 날짜 , 이름 
-            getLogList(
-                this.selectedPlace,
-                function(success){
-                    for(var i=0;i<success.data.length;i++){
-                        var Data = {};
-                        Data.PlaceName = success.data[i].placeName;
-                        Data.AccountName = success.data[i].accountName;
-                        //Data.time = success.data[i].time;
-                        var logTime = success.data[i].time.split("T")[0]; 
-                        logTime += " ";
-                        var string = success.data[i].time.split("T")[1];
-                        logTime += string.split(":")[0];
-                        logTime += ":";
-                        logTime += string.split(":")[1];
-                        Data.time = logTime;
-                        //console.log(Data);
-                        vm.logList.push(Data);
-                    }
-                    console.log('로그 조회 성공');
-                },
-                function(fail){
-                    console.log('로그 조회 실패');
+                if(this.startDate != "" && this.endDate != ""){ // 기간 조회
+                    vm.logList= [];
+                    getLogPeriod(
+                        vm.user.email,
+                        this.selectedPlace,
+                        this.startDate,
+                        this.endDate,
+                        function(success){
+                            console.log('기간으로 로그 조회 성공');
+                            for(var i=0;i<success.data.length;i++){
+                                var Data = {};
+                                Data.PlaceName = success.data[i].placeName;
+                                Data.AccountName = success.data[i].accountName;
+                                var logTime = success.data[i].time.split("T")[0]; 
+                                logTime += " ";
+                                var string = success.data[i].time.split("T")[1];
+                                logTime += string.split(":")[0];
+                                logTime += ":";
+                                logTime += string.split(":")[1];
+                                Data.time = logTime;
+                                vm.logList.push(Data);
+                            }
+                        },
+                        function(fail){
+                            console.log('기간으로 로그 조회 실패');
+                        }
+                    )
                 }
-            )
-            
-   
+                else { // 지점으로 조회
+                    vm.logList= [];
+                    getLogList(
+                        vm.user.email,
+                        this.selectedPlace,
+                        function(success){
+                            for(var i=0;i<success.data.length;i++){
+                                var Data = {};
+                                Data.PlaceName = success.data[i].placeName;
+                                Data.AccountName = success.data[i].accountName;
+                                var logTime = success.data[i].time.split("T")[0]; 
+                                logTime += " ";
+                                var string = success.data[i].time.split("T")[1];
+                                logTime += string.split(":")[0];
+                                logTime += ":";
+                                logTime += string.split(":")[1];
+                                Data.time = logTime;
+                                vm.logList.push(Data);
+                            }
+                            console.log('로그 조회 성공');
+                        },
+                        function(fail){
+                            console.log('로그 조회 실패');
+                        }
+                    )
+                }
+            }
         }
 
     },
@@ -207,7 +250,7 @@ export default {
     float: left;
 }
 .logbox {
-    height: 330px;
+    height: 270px;
     width:80%; 
     border: 2px solid rgb(210,210,210);
     border-radius: 33px;
