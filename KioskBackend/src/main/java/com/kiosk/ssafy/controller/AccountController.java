@@ -62,5 +62,19 @@ public class AccountController {
         return result;
     }
 
+    @GetMapping("/SendMessage")
+    @ApiOperation(value = "호출된 직원에 메세지 전송")
+    public Account SendMessage(@RequestParam long accountId){
+        logger.info("send message");
+        Account result = null;
+        try {
+            result = accountService.SendMessage(accountId);
+        }catch (RuntimeException e){
+            logger.error(e.toString());
+        }
+
+        return result;
+    }
+
 
 }
