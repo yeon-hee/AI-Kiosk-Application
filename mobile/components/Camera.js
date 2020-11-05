@@ -102,7 +102,7 @@ export default class Camera extends PureComponent {
   enter = (id) => {
     let data = {
       accountEmail : id,
-      placeName : 0
+      placeName : "신촌점"
     }
     // 로그 남기고 state 변화, 
     writeLog(data,
