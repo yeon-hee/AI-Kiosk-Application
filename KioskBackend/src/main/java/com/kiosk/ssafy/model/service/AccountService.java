@@ -17,6 +17,10 @@ public class AccountService {
     @Autowired
     AccountRepo accountRepo;
 
+    public Account findByEmail(String email) {
+        return accountRepo.findByEmail(email);
+    }
+
     public AccountName findNameById(String id) {
         return accountRepo.findNameByEmail(id).get();
     }
