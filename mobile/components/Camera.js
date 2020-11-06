@@ -4,6 +4,7 @@ import { RNCamera } from 'react-native-camera';
 import {API_ID, API_KEY} from "../config/index.js";
 import {recogFace} from "../api/face.js";
 import {writeLog} from "../api/backend.js";
+import Voice from '@react-native-community/voice';
 
 export default class Camera extends PureComponent {
   constructor(props) {
@@ -13,6 +14,8 @@ export default class Camera extends PureComponent {
       flag : 0,
       accountName : ""
     }
+    Voice.onSpeechResults = this.onSpeechResults;
+    Voice.onSpeechStart = this.onSpeechStart;
   }
   render() {
     return (
@@ -96,7 +99,28 @@ export default class Camera extends PureComponent {
   }
   
   checkGuest = () => {
+    // 직원 확인에 실패했고, 방문객이면 '호출'키워드를 말해달라는 것과 함께 음성인식 시작
+    console.log('직원인식실패, 방문객이면 호출을 말하세요');
+    Voice.stop();
+    Voice.start('ko-KR');
+  }
+  
+  onSpeechStart = (e) => {
+    console.log('Camera onSpeechStart: ' + e);
+  }
 
+  onSpeechResults = (e) => {
+    console.log('Camera onSpeechResults: ', e);
+
+    // 음성인식 결과중에 호출이란 단어가 있으면 방문객 시나리오 페이지 이동
+    let list = e.value;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] == '호출') {
+        console.log('페이지 이동: Camera >> GuestVoice');
+        Voice.destroy().then(Voice.removeAllListeners);
+        this.props.navigation.navigate('GuestVoice');
+      }
+    }
   }
 
   enter = (id) => {
