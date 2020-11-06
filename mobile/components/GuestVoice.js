@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 
 import Voice, {
@@ -31,6 +32,7 @@ let guide = new Sound('guide_tts.wav');
 let confirm = new Sound('confirm_tts.wav');
 let result = new Sound('result_tts.wav');
 const YES_FILTER = ['예', '네', '얘', '내'];
+const TRY_MAX = 10;
 
 class GuestVoice extends Component<Props, State> {
   state = {
@@ -41,10 +43,12 @@ class GuestVoice extends Component<Props, State> {
     started: '',
     results: [],
     partialResults: [], // 여기까지 Voice에 대한 state
+    tryCnt: 0,
 
     // 여기부터는 음성 컴포넌트 전체적인 상태
     staff: {},
-    voicePhase: 0, // 0: 초기상태, 1: 직원호출중, 2: 컨펌중, 3: 호출완료
+    voicePhase: 0, // 0: 초기상태, 1: 직원호출중, 2: 컨펌중, 3: 호출완료, 4: 인식횟수초과, 5: 찾는직원없음
+    
   };
 
   constructor(props: Props) {
@@ -87,16 +91,33 @@ class GuestVoice extends Component<Props, State> {
   onSpeechEnd = (e: any) => {
     console.log('onSpeechEnd: ', e);
     this.setState({end: '√'});
+
   };
 
   onSpeechError = (e: SpeechErrorEvent) => {
     console.log('onSpeechError: ', e);
     this.setState({error: JSON.stringify(e.error),});
+
+    // 말한게 없을경우 여기에서 처리
+    this.setState({tryCnt: this.state.tryCnt + 1});
+    console.log('인식재시도횟수: ' + this.state.tryCnt);
+
+    if (this.state.tryCnt >= TRY_MAX) {
+      // 인식시간초과, 다시시도해주세요
+      console.log('인식시간초과, 다시시도해주세요');
+      this.setState({voicePhase: 4});
+      setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
+    } else {
+      this._startRecognizing();
+    }
   };
 
   onSpeechResults = (e: SpeechResultsEvent) => {
     console.log('onSpeechResults: ', e);
     this.setState({results: e.value});
+
+    // 음성인식 정상 종료 >> 인식횟수카운트초기화
+    this.setState({tryCnt: 0});
 
     if (this.state.voicePhase == 1) {
       // 백앤드에 음성인식처리결과 보냄
@@ -173,7 +194,7 @@ class GuestVoice extends Component<Props, State> {
 
   matchRequest({value}) {   // 음성인식 결과 리스트 전송해서 매치되는 직원 있는지 찾는 요청 보내기
     let host = 'http://k3a508.p.ssafy.io';
-    const url = host + '/kiosk/account/getAccountInfo?names=' + value.join(',');
+    const url = host + '/kiosk/account/getAccountInfo?placeId=9&names=' + value.join(',');
 
     console.log(url);
 
@@ -193,7 +214,10 @@ class GuestVoice extends Component<Props, State> {
             this._startRecognizing();
           });
         } else {  // 서버에 매치되는 직원이 없음
-          
+          console.log('서버에 매치되는 직원이 없음');
+          // 찾을 수 없습니다.
+          this.setState({voicePhase: 5});
+          setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
         }
       })
       .catch(e => {
@@ -217,19 +241,20 @@ class GuestVoice extends Component<Props, State> {
       console.log('user confirm checked!!');
 
       let host = 'http://k3a508.p.ssafy.io';
-      let staffCallUrl = host + '/kiosk/account/getAccountInfo?names=' + this.state.staff.name;
+      let staffCallUrl = host + '/kiosk/account/SendMessage?accountId=' + this.state.staff.id;
 
       console.log(staffCallUrl);
 
       axios.get(staffCallUrl)
         .then((res) => {
           if (res.status == 200) {
-            console.dir(res);
+            console.log(res.data);
 
             // 정상적으로 호출메세지보냈다는 화면 및 음성 표시 및 한 루틴 종료
             this.setState({voicePhase: 3});
             result.play(() => {
               this.setState({staff: {}, voicePhase: 0});
+              setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
             });
           }
         })
@@ -238,6 +263,7 @@ class GuestVoice extends Component<Props, State> {
         });
     } else {
       // 되돌아가기
+      this.playSound();
     }
   }
 
@@ -250,12 +276,17 @@ class GuestVoice extends Component<Props, State> {
       information = <Text style={styles.welcome}>찾는 분의 이름을 말해주세요</Text>
     } else if (this.state.voicePhase == 2) {
       information = <Text style={styles.welcome}>입력하신 내용이 맞습니까?</Text>
-    } else {
+    } else if (this.state.voicePhase == 3) {
       information = <Text style={styles.welcome}>{this.state.staff.name} 님에게 호출메세지를 보냈습니다. 잠시만 기다려주세요.</Text>
+    } else if (this.state.voicePhase == 4) {
+      information = <Text style={styles.welcome}>인식시간 초과, 다시 시도해주세요</Text>
+    } else {
+      information = <Text style={styles.welcome}>찾을 수 없습니다.</Text>
     }
 
     return (
       <View style={styles.container}>
+        <Text style={styles.welcome} onPress={() => this.playSound()}>수동으로 시작</Text>
 
         {information}
 
@@ -277,6 +308,13 @@ class GuestVoice extends Component<Props, State> {
           {this.state.staff.name}
         </Text>
 
+        <Text style={styles.stat}>누적시도: {this.state.tryCnt}</Text>
+
+        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Camera')} style={styles.capture}>
+            <Text style={{ fontSize: 14 }}> SNAP </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
