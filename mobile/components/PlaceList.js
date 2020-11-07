@@ -3,8 +3,10 @@ import { StyleSheet, Text, FlatList, View } from 'react-native';
 import { getPlaceList } from '../api/backend';
 import PlaceEach from './PlaceEach';
 
+import { connect } from 'react-redux';
 
-export default class PlaceList extends Component {
+
+class PlaceList extends Component {
   state = {
     placeList: [],
   };
@@ -15,6 +17,7 @@ export default class PlaceList extends Component {
 
   componentDidMount() {
     getPlaceList(null, this.saveRes, this.errorRes);
+    console.log(this.props._place.name+'@@@');
   }
 
   saveRes = (res) => {
@@ -33,6 +36,7 @@ export default class PlaceList extends Component {
           renderItem={({item}) => <PlaceEach place={item} navigation={this.props.navigation}/>}
           keyExtractor={(item) => item.id.toString()}
         />
+        <Text style={styles.title}>asdf{this.props._place.name}</Text>
       </View>
     );
   }
@@ -50,3 +54,16 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
+
+const mapStateToProps = state => ({
+  _place: state.placeReducer._place
+});
+
+const mapDispatchToProps = dispatch => ({
+  setPlace: place => dispatch(setPlace(place)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PlaceList);

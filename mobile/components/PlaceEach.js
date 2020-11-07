@@ -1,14 +1,22 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux';
+import { setPlace } from '../store/modules/place';
 
-export default class PlaceEach extends Component {
+class PlaceEach extends Component {
   constructor(props) {
     super(props);
   }
-
+  componentDidMount() {
+    console.log(this.props.place);
+    setPlace(this.props.place);
+  }
   pressBtn = () => {
+    console.log('asdfasdf');
     console.log(this.props.place.name);
-    this.props.navigation.navigate('Camera');
+    setPlace(this.props.place);
+
+    // this.props.navigation.navigate('Camera');
   }
 
   render() {
@@ -37,3 +45,16 @@ const styles = StyleSheet.create({
 
   }
 });
+
+const mapStateToProps = state => ({
+  _place: state.placeReducer._place
+});
+
+const mapDispatchToProps = dispatch => ({
+  setPlace: place => dispatch(setPlace(place)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlaceEach);
