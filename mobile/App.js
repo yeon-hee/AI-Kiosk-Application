@@ -12,11 +12,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Camera from "./components/Camera.js"
 import GuestVoice from "./components/GuestVoice.js"
 import PlaceList from './components/PlaceList'
+
+import {useState} from 'react';
+import { PlaceContext, initialState } from './context/PlaceContext';
+
 const App: () => React$Node = () => {
   const Stack = createStackNavigator();
+  const [_place, setPlace] = useState(initialState);
   
   return (
-    <NavigationContainer>
+    <PlaceContext.Provider value={{_place, setPlace}}>
+      <NavigationContainer>
         <Stack.Navigator initialRouteName="PlaceList">
           <Stack.Screen 
             name="PlaceList" 
@@ -35,6 +41,7 @@ const App: () => React$Node = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
+    </PlaceContext.Provider>
   );
 };
 export default App;

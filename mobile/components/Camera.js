@@ -7,7 +7,11 @@ import {recogFace} from "../api/face.js";
 import {writeLog} from "../api/backend.js";
 import Voice from '@react-native-community/voice';
 
+import { useContext } from 'react';
+import { PlaceContext } from '../context/PlaceContext';
+
 function Camera({navigation}) {
+  const {_place} = useContext(PlaceContext);
     
   const [takingPic, setTakingPic] = useState(false);
   const [flag, setFlag] = useState(0);
@@ -112,9 +116,10 @@ function Camera({navigation}) {
   }
 
   const enter = (id) => {
+  	let placeName = _place.name;
     let data = {
       accountEmail : id,
-      placeName : "신촌점"
+      placeName : placeName,
     }
       // 로그 남기고 state 변화, 
     writeLog(data,

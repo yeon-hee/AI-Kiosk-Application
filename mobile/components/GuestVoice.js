@@ -13,6 +13,7 @@ import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from '@react-native-community/voice';
+import { PlaceContext } from '../context/PlaceContext';
 
 import Sound from 'react-native-sound';
 import axios from 'axios';
@@ -35,6 +36,8 @@ const YES_FILTER = ['예', '네', '얘', '내'];
 const TRY_MAX = 10;
 
 class GuestVoice extends Component<Props, State> {
+  static contextType = PlaceContext;
+
   state = {
     recognized: '',
     pitch: '',
@@ -194,7 +197,8 @@ class GuestVoice extends Component<Props, State> {
 
   matchRequest({value}) {   // 음성인식 결과 리스트 전송해서 매치되는 직원 있는지 찾는 요청 보내기
     let host = 'http://k3a508.p.ssafy.io';
-    const url = host + '/kiosk/account/getAccountInfo?placeId=9&names=' + value.join(',');
+    let placeId = this.context._place.id;
+    const url = host + '/kiosk/account/getAccountInfo?placeId='+placeId+'&names=' + value.join(',');
 
     console.log(url);
 

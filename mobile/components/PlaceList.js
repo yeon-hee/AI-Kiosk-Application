@@ -3,8 +3,11 @@ import { StyleSheet, Text, FlatList, View } from 'react-native';
 import { getPlaceList } from '../api/backend';
 import PlaceEach from './PlaceEach';
 
+import { PlaceContext } from '../context/PlaceContext';
 
 export default class PlaceList extends Component {
+  static contextType = PlaceContext;
+
   state = {
     placeList: [],
   };
@@ -33,6 +36,8 @@ export default class PlaceList extends Component {
           renderItem={({item}) => <PlaceEach place={item} navigation={this.props.navigation}/>}
           keyExtractor={(item) => item.id.toString()}
         />
+
+        <Text style={styles.title}>선택된 지점id: {this.context._place.id}</Text>
       </View>
     );
   }
