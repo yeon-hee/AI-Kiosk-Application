@@ -15,7 +15,7 @@
             <div class="detailbox">
                 <div class="placeDetail">
                     <span id="detail1">{{place.name}}</span><br>
-                    <v-icon size="13">call</v-icon>
+                    <v-icon size="15">call</v-icon>
                     <span id="detail2">{{place.phone}}</span><br>
                     <span id="detail3">{{place.address}}</span>
                 </div>
@@ -224,7 +224,7 @@ export default {
     object-fit: cover;
 }
 #authority {
-    font-size: 10px;    
+    font-size: 12px;    
     color: rgb(210,210,210);
     margin-left: 13px;
 }
@@ -270,12 +270,12 @@ export default {
     font-size: 16px;
 }
 #detail2 {
-    font-size: 11px;
+    font-size: 14px;
     color: rgb(180,180,180);
     padding-left: 3px;
 }
 #detail3 {
-    font-size: 12px;
+    font-size: 14px;
     color: rgb(180,180,180);
 }
 #map {
@@ -284,7 +284,7 @@ export default {
 }
 #total{
     margin-left :12px;
-    font-size: 5px;
+    font-size: 13px;
     color: rgb(180,180,180);
 }
 .box {

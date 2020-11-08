@@ -5,7 +5,7 @@ import AdminPage from "./components/admin/Admin.vue";
 import PlaceDetail from "./components/admin/PlaceDetail.vue";
 import LogPage from "./views/LogPage.vue";
 import UpdateAccount from "./views/UpdateAccount.vue";
-
+import BoardPage from "./views/BoardPage.vue";
 export default [
     {
         path : '/',
@@ -26,6 +26,11 @@ export default [
         path : '/adminMenu',
         name : 'AdminPage',
         component : AdminPage
+    },
+    {
+        path : '/boardMenu',
+        name : 'BoardPage',
+        component : BoardPage
     },
     {
         path : '/addAccount/:id',
