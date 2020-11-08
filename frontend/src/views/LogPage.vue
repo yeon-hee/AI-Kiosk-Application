@@ -33,16 +33,6 @@
                             <input type="text" disabled id="notice">
                         </v-col>
                     </v-row>
-                    <!-- <v-row align="center">
-                        <v-col cols="2"></v-col>
-                        <v-col cols="2">이름</v-col>
-                        <v-col cols="6">
-                            <div class="namebox">
-                                <input type="text" id="nameSearch" v-model="searchName">
-                            </div>
-                        </v-col>
-                        <v-col cols="2"></v-col>
-                    </v-row> -->
                     <v-row align="center">
                         <v-col cols="5"></v-col>
                         <v-col cols="2" style="text-align: center;">
@@ -216,6 +206,16 @@ export default {
 </script>
 
 <style>
+#detail {
+    font-size:18px; 
+    margin-left: 10px;
+}
+#placeList{
+    text-align:left; 
+    width:80%; 
+    margin:auto; 
+    margin-top:80px;
+}
 #notice {
     font-family: sans-serif;
     color: red;

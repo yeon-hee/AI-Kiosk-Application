@@ -10,7 +10,7 @@
                 <v-btn depressed color="info" id="modifybtn" @click.stop="editPlace = true">지점 수정</v-btn>
                 <div style="clear: both;"></div>
             </div>
-            <v-divider></v-divider><br><br>
+            <v-divider style="margin-top:0px;"></v-divider><br><br>
 
             <div class="detailbox">
                 <div class="placeDetail">
@@ -33,7 +33,7 @@
                 </button>
             </div>
             <div style="clear: both;"></div>
-            <v-divider></v-divider><br><br>
+            <v-divider style="margin-top:0px;"></v-divider><br><br>
 
             <div v-for="(user, index) in users" :key="user.email">
                 <div class="box">
@@ -208,7 +208,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+#placeList{
+    text-align:left; 
+    width:80%; 
+    margin:auto; 
+    margin-top:80px;
+}
 #userFace {
     float: left;
     width: 50px; 
@@ -275,5 +281,19 @@ export default {
 #map {
     height: 100px;
     margin: 11px 15px 0 0;
+}
+#total{
+    margin-left :12px;
+    font-size: 5px;
+    color: rgb(180,180,180);
+}
+.box {
+    height: 70px;
+    width:80%; 
+    border: 1px solid rgb(225,225,225);
+    border-radius: 23px;
+    padding: 12px 10px 10px 10px;
+    margin:auto; 
+    margin-bottom: 15px;
 }
 </style>

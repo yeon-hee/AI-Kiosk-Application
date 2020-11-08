@@ -10,7 +10,7 @@
                     <v-icon>add_circle_outline</v-icon>
                 </button>
             </div>
-        <v-divider></v-divider><br><br>
+        <v-divider style="margin-top:0px;"></v-divider><br><br>
         <div v-for="(place, index) in places" :key="place.name">
             <div class="box">
                     <div style="float: left;">
@@ -71,7 +71,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #placeList{
     text-align:left; 
     width:80%; 
