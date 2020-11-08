@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableHighlight,
-  TouchableOpacity,
 } from 'react-native';
 
 import Voice, {
@@ -14,6 +13,8 @@ import Voice, {
   SpeechErrorEvent,
 } from '@react-native-community/voice';
 import { PlaceContext } from '../context/PlaceContext';
+import { BACK_URL } from '../config';
+import Phase from './GuestVoicePhase';
 
 import Sound from 'react-native-sound';
 import axios from 'axios';
@@ -33,7 +34,7 @@ let guide = new Sound('guide_tts.wav');
 let confirm = new Sound('confirm_tts.wav');
 let result = new Sound('result_tts.wav');
 const YES_FILTER = ['예', '네', '얘', '내'];
-const TRY_MAX = 10;
+const TRY_MAX = 50000;
 
 class GuestVoice extends Component<Props, State> {
   static contextType = PlaceContext;
@@ -61,7 +62,6 @@ class GuestVoice extends Component<Props, State> {
     Voice.onSpeechEnd = this.onSpeechEnd;
     Voice.onSpeechError = this.onSpeechError;
     Voice.onSpeechResults = this.onSpeechResults;
-    Voice.onSpeechPartialResults = this.onSpeechPartialResults;
     Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
   }
 
@@ -196,27 +196,19 @@ class GuestVoice extends Component<Props, State> {
 
 
   matchRequest({value}) {   // 음성인식 결과 리스트 전송해서 매치되는 직원 있는지 찾는 요청 보내기
-    let host = 'http://k3a508.p.ssafy.io';
     let placeId = this.context._place.id;
-    const url = host + '/kiosk/account/getAccountInfo?placeId='+placeId+'&names=' + value.join(',');
-
-    console.log(url);
+    const url = BACK_URL + '/account/getAccountInfo?placeId=' + placeId + '&names=' + value.join(',');
 
     axios.get(url)
       .then(res => {
         if (res.status == 200 && res.data.length != 0) {  // 정상응답 and 데이터있는경우
 
-          let staff = res.data[0];
-          console.dir(staff);
-          this.setState({
-            staff: staff,
-          });
+          this.setState({staff: res.data[0],});
 
           // 컨펌절차로 넘어감
           this.setState({voicePhase: 2});
-          confirm.play(() => {
-            this._startRecognizing();
-          });
+          confirm.play(() => { this._startRecognizing(); });
+
         } else {  // 서버에 매치되는 직원이 없음
           console.log('서버에 매치되는 직원이 없음');
           // 찾을 수 없습니다.
@@ -244,15 +236,13 @@ class GuestVoice extends Component<Props, State> {
       // 컨펌확인 했으니 호출 메세지 보내
       console.log('user confirm checked!!');
 
-      let host = 'http://k3a508.p.ssafy.io';
-      let staffCallUrl = host + '/kiosk/account/SendMessage?accountId=' + this.state.staff.id;
+      let staffCallUrl = BACK_URL + '/account/SendMessage?accountId=' + this.state.staff.id;
 
       console.log(staffCallUrl);
 
       axios.get(staffCallUrl)
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data);
 
             // 정상적으로 호출메세지보냈다는 화면 및 음성 표시 및 한 루틴 종료
             this.setState({voicePhase: 3});
@@ -272,32 +262,35 @@ class GuestVoice extends Component<Props, State> {
   }
 
   render() {
+    let isListening = (this.state.started);
 
     let information = null;
     if (this.state.voicePhase == 0) {
       information = null;
     } else if (this.state.voicePhase == 1) {
-      information = <Text style={styles.welcome}>찾는 분의 이름을 말해주세요</Text>
+      information = "찾는 분의 이름을 말해주세요"
     } else if (this.state.voicePhase == 2) {
-      information = <Text style={styles.welcome}>입력하신 내용이 맞습니까?</Text>
+      information = "입력하신 내용이 맞습니까?"
     } else if (this.state.voicePhase == 3) {
-      information = <Text style={styles.welcome}>{this.state.staff.name} 님에게 호출메세지를 보냈습니다. 잠시만 기다려주세요.</Text>
+      information = this.state.staff.name + " 님에게 호출메세지를 보냈습니다. 잠시만 기다려주세요."
     } else if (this.state.voicePhase == 4) {
-      information = <Text style={styles.welcome}>인식시간 초과, 다시 시도해주세요</Text>
+      information = "인식시간 초과, 다시 시도해주세요"
     } else {
-      information = <Text style={styles.welcome}>찾을 수 없습니다.</Text>
+      information = "찾을 수 없습니다."
     }
 
     return (
+      <>
+      <Phase phase={this.state.voicePhase}/>
       <View style={styles.container}>
-        <Text style={styles.welcome} onPress={() => this.playSound()}>수동으로 시작</Text>
-
-        {information}
+        <View style={styles.infoContainer}>
+          <Text style={styles.welcome}>{information}</Text>
+        </View>
 
         <TouchableHighlight onPress={this._startRecognizing}>
-          <Image style={styles.button} source={require('../resources/button.png')} />
+          <Image style={styles.button} source={isListening ? require('../resources/ic_mic_24px.png') : require('../resources/ic_mic_none_24px.png')} />
         </TouchableHighlight>
-        
+        <Text>{isListening? 'Listening' : 'Waiting'}</Text>
         <Text style={styles.stat}>Results</Text>
         {this.state.results.map((result, index) => {
           return (
@@ -306,20 +299,16 @@ class GuestVoice extends Component<Props, State> {
             </Text>
           );
         })}
-
         <Text style={styles.stat}>Match Result</Text>
         <Text style={styles.stat}>
           {this.state.staff.name}
         </Text>
 
         <Text style={styles.stat}>누적시도: {this.state.tryCnt}</Text>
+        <Text style={styles.stat}>pitch: {this.state.pitch}</Text>
 
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Camera')} style={styles.capture}>
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
-          </TouchableOpacity>
-        </View>
       </View>
+      </>
     );
   }
 }
@@ -328,12 +317,16 @@ const styles = StyleSheet.create({
   button: {
     width: 50,
     height: 50,
+    resizeMode:'contain',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    // backgroundColor: '#F5FCFF',
+  },
+  infoContainer: {
+    height: 200,
   },
   welcome: {
     fontSize: 20,
