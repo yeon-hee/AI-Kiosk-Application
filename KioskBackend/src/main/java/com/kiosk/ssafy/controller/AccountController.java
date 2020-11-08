@@ -10,8 +10,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import java.net.http.HttpClient;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 @CrossOrigin(origins = { "*" })
@@ -68,7 +76,19 @@ public class AccountController {
         logger.info("send message");
         Account result = null;
         try {
-            result = accountService.SendMessage(accountId);
+            result = accountService.SendMessage(accountId); 
+            // 해당 직원에게 메세지 전송
+            String slackUrl = "https://meeting.ssafy.com/hooks/7qq1a49fsbf38nt13b3nntkote";
+            RestTemplate restTemplate = new RestTemplate();
+            Map<String,Object> request = new HashMap<String,Object>();
+            String slackId = "@";
+            slackId += result.getEmail().split("@")[0];
+            request.put("channel", slackId); // 호출할 직원 아이디 - 이메일의 @앞까지
+            request.put("text", "방문자께서 직원을 호출했습니다.");
+
+            HttpEntity<Map<String,Object>> entity = new HttpEntity<Map<String,Object>>(request);
+            restTemplate.exchange(slackUrl, HttpMethod.POST, entity, String.class);
+
         }catch (RuntimeException e){
             logger.error(e.toString());
         }
