@@ -129,6 +129,7 @@ export default {
         EditPlace
     },
     created(){
+
         const vm = this;
         getPlace(
             this.id,

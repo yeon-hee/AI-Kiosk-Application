@@ -85,17 +85,34 @@ export default {
                     phone: ""
                 }
             },
+            constraints : {
+                video: true,
+                audio: true
+            },
             uploadedImageUrl: ""
         };
     },
     mounted() {
         this.video = this.$refs.video;
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-                this.video.srcObject = stream;
-                this.video.play();
-            });
-        }
+        navigator.mediaDevices.getUserMedia(this.constraints)
+            .then(stream => {
+                console.log("웹캠 접근 성공");
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+                        this.video.srcObject = stream;
+                        this.video.play();
+                    });
+                }
+            })
+            .catch(error => {
+                console.log("웹캠 접근 실패");
+            })
+        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        //     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        //         this.video.srcObject = stream;
+        //         this.video.play();
+        //     });
+        // }
     },
     components: {
         HNav
