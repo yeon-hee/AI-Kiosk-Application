@@ -91,7 +91,7 @@ export default {
     margin: 0 10px 0 20px;
     text-align: left;
     text-decoration:none;
-    margin-left:20px;
+    margin-left:10px;
 }
 
 #link-to-entrance, #link-to-admin, #link-to-board, #link-to-signup, #link-to-login, #link-to-logout{
