@@ -94,19 +94,29 @@ export default {
     },
     mounted() {
         this.video = this.$refs.video;
-        navigator.mediaDevices.getUserMedia(this.constraints)
-            .then(stream => {
-                console.log("웹캠 접근 성공");
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-                        this.video.srcObject = stream;
-                        this.video.play();
-                    });
-                }
-            })
-            .catch(error => {
-                console.log("웹캠 접근 실패");
-            })
+        const vm = this;
+        if(navigator.webkitGetUserMedia){
+            navigator.webkitGetUserMedia({ video: true },
+            function(stream){vm.video.srcObject = stream; vm.video.play();},
+            function(error){console.log("웹캠 접근 실패");})
+        }
+        else {
+            console.log("웹캠 접근 실패");
+        }
+      
+        // navigator.mediaDevices.getUserMedia(this.constraints)
+        //     .then(stream => {
+        //         console.log("웹캠 접근 성공");
+        //         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        //             navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        //                 this.video.srcObject = stream;
+        //                 this.video.play();
+        //             });
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log("웹캠 접근 실패");
+        //     })
         // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         //     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
         //         this.video.srcObject = stream;
