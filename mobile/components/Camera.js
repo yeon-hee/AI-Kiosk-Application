@@ -169,29 +169,27 @@ function Camera({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.edge}>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.front}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          onFacesDetected={faceDetect}
-        />
-      </View>
+      <RNCamera
+        ref={ref => {
+          this.camera = ref;
+        }}
+        style={styles.preview}
+        type={RNCamera.Constants.Type.front}
+        flashMode={RNCamera.Constants.FlashMode.on}
+        androidCameraPermissionOptions={{
+          title: 'Permission to use camera',
+          message: 'We need your permission to use your camera',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        }}
+        androidRecordAudioPermissionOptions={{
+          title: 'Permission to use audio recording',
+          message: 'We need your permission to use your audio',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        }}
+        onFacesDetected={faceDetect}
+      />
       <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
         <TouchableOpacity onPress={()=>navigation.navigate('GuestVoice')} style={styles.capture}>
           <Text style={{ fontSize: 14 }}> SNAP </Text>
