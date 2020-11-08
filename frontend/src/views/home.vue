@@ -206,11 +206,11 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
-#link-to-home{
+#link-to-admin{
     color:rgb(83,71,122);
 }
 
-#link-to-entrance, #link-to-admin, #link-to-board{
+#link-to-entrance, #link-to-home, #link-to-board{
     color: white;
 
 }
