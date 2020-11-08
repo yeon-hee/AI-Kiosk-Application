@@ -7,10 +7,10 @@
                 </router-link>
             </v-toolbar-title>
             <v-toolbar-title id="header2">
-                <router-link id="link-to-home" to="/" @click="home">HOME</router-link>
-                <router-link id="link-to-entrance" to="/logMenu">출입기록조회</router-link>
-                <router-link id="link-to-admin" to="/adminMenu" v-if="$store.state.isAdmin">관리자메뉴</router-link>
-                <router-link id="link-to-board" to="/logout">공지사항</router-link>
+                <router-link id="link-to-home" @click.native="home" to="/">HOME</router-link>
+                <router-link id="link-to-entrance" @click.native="log" to="/logMenu" >출입기록조회</router-link>
+                <router-link id="link-to-admin" @click.native="admin" to="/adminMenu" v-if="$store.state.isAdmin">관리자메뉴</router-link>
+                <router-link id="link-to-board" @click.native="board" to="/boardMenu">공지사항</router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-title id="header2">
@@ -51,8 +51,28 @@ export default {
     },
     methods: {
         home() {
-            console.log('아녕');
-            alert('안녕하세요');
+            document.getElementById("link-to-home").style.color = "rgb(83,71,122)";
+            document.getElementById("link-to-entrance").style.color = "white";
+            document.getElementById("link-to-admin").style.color = "white";
+            document.getElementById("link-to-board").style.color = "white";
+        },
+        log() {
+            document.getElementById("link-to-home").style.color = "white";
+            document.getElementById("link-to-entrance").style.color = "rgb(83,71,122)";
+            document.getElementById("link-to-admin").style.color = "white";
+            document.getElementById("link-to-board").style.color = "white";
+        },
+        admin() {
+            document.getElementById("link-to-home").style.color = "white";
+            document.getElementById("link-to-entrance").style.color = "white";
+            document.getElementById("link-to-admin").style.color = "rgb(83,71,122)";
+            document.getElementById("link-to-board").style.color = "white";
+        },
+        board() {
+            document.getElementById("link-to-home").style.color = "white";
+            document.getElementById("link-to-entrance").style.color = "white";
+            document.getElementById("link-to-admin").style.color = "white";
+            document.getElementById("link-to-board").style.color = "rgb(83,71,122)";
         }
 
     },

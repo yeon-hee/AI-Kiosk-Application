@@ -100,7 +100,7 @@ export default {
 }
 #total{
     margin-left :12px;
-    font-size: 5px;
+    font-size: 13px;
     color: rgb(180,180,180);
 }
 </style>
