@@ -206,15 +206,6 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
-#link-to-admin{
-    color:rgb(83,71,122);
-}
-
-#link-to-entrance, #link-to-home, #link-to-board{
-    color: white;
-
-}
-
 .banner{
     height:500px;
     background: linear-gradient( to right, rgb(236,222,227), rgb(204,234,238) );

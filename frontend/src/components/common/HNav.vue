@@ -87,6 +87,15 @@ export default {
 }
 
 #link-to-home{
+    color:rgb(83,71,122);
+}
+
+#link-to-entrance, #link-to-admin, #link-to-board{
+    color: white;
+
+}
+
+#link-to-home{
     font-size:18px;
     margin: 0 10px 0 20px;
     text-align: left;

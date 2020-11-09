@@ -10,16 +10,19 @@
                     <v-icon>add_circle_outline</v-icon>
                 </button>
             </div>
-        <v-divider style="margin-top:0px;"></v-divider><br><br>
+            
+        <v-divider style="margin-top:5px;"></v-divider><br><br>
         <div v-for="(place, index) in places" :key="place.name">
             <div class="box">
-                    <div style="float: left;">
+                <button @click="placeDetail(index)" style="width:100%;">
+                    <div style="float: left; text-align: left;">
                         <span id="name">{{place.name}}</span><br>
                         <span id="address"><v-icon size="15" style="margin-bottom:2px;">location_on</v-icon>{{place.address}}</span>
                     </div>
-                    <div style="float: right; margin-top:10px;">
-                        <button @click="placeDetail(index)"><v-icon>keyboard_arrow_right</v-icon></button>
+                    <div style="float:right; margin-top:10px;">
+                        <v-icon  color="rgb(170,145,251)">keyboard_arrow_right</v-icon>
                     </div>
+                    </button>
             </div>
         </div>
 
@@ -84,7 +87,7 @@ export default {
     width:80%; 
     border: 1px solid rgb(225,225,225);
     border-radius: 23px;
-    padding: 12px 10px 10px 10px;
+    padding: 12px 10px 10px 17px;
     margin:auto; 
     margin-bottom: 15px;
 }

@@ -10,7 +10,7 @@
                 <v-btn depressed color="info" id="modifybtn" @click.stop="editPlace = true">지점 수정</v-btn>
                 <div style="clear: both;"></div>
             </div>
-            <v-divider style="margin-top:0px;"></v-divider><br><br>
+            <v-divider style="margin-top:5px;"></v-divider><br><br>
 
             <div class="detailbox">
                 <div class="placeDetail">
@@ -36,7 +36,7 @@
             <v-divider style="margin-top:0px;"></v-divider><br><br>
 
             <div v-for="(user, index) in users" :key="user.email">
-                <div class="box">
+                <div class="Userbox">
                         <!-- 이미지 위치-->
                         <img :src="user.photo" id="userFace"> 
                         <div style="float: left; margin-left: 12px;">
@@ -129,7 +129,6 @@ export default {
         EditPlace
     },
     created(){
-
         const vm = this;
         getPlace(
             this.id,
@@ -210,6 +209,7 @@ export default {
 </script>
 
 <style scoped>
+
 #placeList{
     text-align:left; 
     width:80%; 
@@ -240,7 +240,6 @@ export default {
 }
 #deletebtn {
     float: right;
-    margin-bottom: 5px;
     width: 18px;
     height: 33px;
     font-size: 13px;
@@ -248,7 +247,7 @@ export default {
 }
 #modifybtn{
     float: right;
-    margin: 0 6px 5px 0;
+    margin: 0 6px 0px 0;
     width: 18px;
     height: 33px;
     font-size: 13px;
@@ -288,7 +287,7 @@ export default {
     font-size: 13px;
     color: rgb(180,180,180);
 }
-.box {
+.Userbox {
     height: 70px;
     width:80%; 
     border: 1px solid rgb(225,225,225);

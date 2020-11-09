@@ -6,7 +6,7 @@
                 <v-icon style="margin-bottom:9px;">login</v-icon>
                 <span id="detail">출입기록 조회</span>
             </div>
-            <v-divider></v-divider><br><br>
+            <v-divider style="margin-top:5px;"></v-divider><br><br>
 
             <div class="logbox">
                 <div class="logDetail">
