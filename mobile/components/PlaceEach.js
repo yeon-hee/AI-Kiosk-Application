@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     margin: 20,
+    marginBottom: 0,
     borderRadius: 25,
     borderColor: 'lightgray',
     borderWidth: 1,
