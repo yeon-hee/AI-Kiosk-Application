@@ -14,7 +14,8 @@ export default new Vuex.Store({
         isSigned: false, // 로그인 여부
         isAdmin: false, // 관리자 여부
         user: {
-            email: "" // 사용자 아이디 저장
+            email: "", // 사용자 아이디 저장
+            name: ""
         },
         placeId: 0
     },
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         },
         setUserEmail(state, email) {
             state.user.email = email;
+        },
+        setUserName(state, name) {
+            state.user.name = name;
         },
         logout(state) {
             state.isSigned = false;

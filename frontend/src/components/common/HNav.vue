@@ -17,6 +17,7 @@
                 <a id="link-to-login"
                 v-if="!$store.state.isSigned"
                     @click.stop="signup = true">로그인</a>
+                <span id="login-user" v-if="$store.state.isSigned">{{userName}}님</span>
                 <router-link id="link-to-logout" to="/logout" v-if="$store.state.isSigned">로그아웃</router-link>
             </v-toolbar-title>
 
@@ -40,13 +41,16 @@ export default {
             windowSize: {
                 x: 0,
                 y: 0
-            }
+            },
+            userName: this.$store.state.user.name,
         };
     },
     components: {
         Login
     },
     created() {
+        console.log('안녕');
+        console.log(this.userName);
 
     },
     methods: {
@@ -104,6 +108,14 @@ export default {
 }
 
 #link-to-entrance, #link-to-admin, #link-to-board, #link-to-signup, #link-to-login, #link-to-logout{
+    color: white;
+    font-size:18px;
+    margin: 0 10px;
+    text-align: left;
+    text-decoration:none;
+}
+
+#login-user{
     color: white;
     font-size:18px;
     margin: 0 10px;
