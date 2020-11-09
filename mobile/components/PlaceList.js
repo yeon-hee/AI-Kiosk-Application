@@ -39,7 +39,7 @@ export default class PlaceList extends Component {
           keyExtractor={(item) => item.id.toString()}
         />
 
-        <Text>선택된 지점: {this.context._place.name}</Text>
+        {/* <Text>선택된 지점: {this.context._place.name}</Text> */}
       </View>
     );
   }
