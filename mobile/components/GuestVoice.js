@@ -110,6 +110,8 @@ class GuestVoice extends Component<Props, State> {
       console.log('인식시간초과, 다시시도해주세요');
       this.setState({voicePhase: 4});
       setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
+    } else if (e.error.message[0] == 8) {
+      setTimeout(this._startRecongnizing, 2000);
     } else {
       this._startRecognizing();
     }
