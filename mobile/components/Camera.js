@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { RNCamera } from 'react-native-camera';
 import {API_ID, API_KEY} from "../config/index.js";
@@ -16,6 +16,7 @@ function Camera({navigation}) {
   const [takingPic, setTakingPic] = useState(false);
   const [flag, setFlag] = useState(0);
   const [accountName, setAccountName] = useState("");
+  // const [content, setContent] = useState("");
   
   useFocusEffect(
     React.useCallback(() => {
@@ -149,51 +150,65 @@ function Camera({navigation}) {
         backgroundColor: 'black',
       },
       preview: {
-        flex: 1,
+        flex: 5,
         justifyContent: 'flex-end',
         alignItems: 'center',
       },
-      capture: {
-        flex: 0,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        padding: 15,
-        paddingHorizontal: 20,
-        alignSelf: 'center',
-        margin: 20,
+      normal : {
+        borderWidth : 10,
+        borderColor : "transparent",
+        flex: 5,
       },
-      edge : {
-        
+      fail : {
+        borderWidth : 10,
+        borderColor : 'red',
+        flex: 5,
+      },
+      certificated : {
+        borderWidth : 10,
+        borderColor : 'green',
+        flex: 5,
       }
   });
+  let camera =  <RNCamera
+                  ref={ref => {
+                    this.camera = ref;
+                  }}
+                  style={styles.preview}
+                  type={RNCamera.Constants.Type.front}
+                  flashMode={RNCamera.Constants.FlashMode.on}
+                  androidCameraPermissionOptions={{
+                    title: 'Permission to use camera',
+                    message: 'We need your permission to use your camera',
+                    buttonPositive: 'Ok',
+                    buttonNegative: 'Cancel',
+                  }}
+                  androidRecordAudioPermissionOptions={{
+                    title: 'Permission to use audio recording',
+                    message: 'We need your permission to use your audio',
+                    buttonPositive: 'Ok',
+                    buttonNegative: 'Cancel',
+                  }}
+                  onFacesDetected={faceDetect}
+                />;
+  let edgeStyle;
+  let content="";
+  if(flag==0) {
+    content = "";
+    edgeStyle=<View style={styles.normal}>{camera}</View>
+  }else if(flag==1) {
+    content = accountName+"님 인증되었습니다.";
+    edgeStyle=<View style={styles.certificated}>{camera}</View>
+  }else {
+    content = "얼굴 인식에 실패하였습니다.\n 방문객이시라면 \"호출\"을 말씀해주세요."
+    edgeStyle=<View style={styles.fail}>{camera}</View>
+  }
 
   return (
     <View style={styles.container}>
-      <RNCamera
-        ref={ref => {
-          this.camera = ref;
-        }}
-        style={styles.preview}
-        type={RNCamera.Constants.Type.front}
-        flashMode={RNCamera.Constants.FlashMode.on}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        onFacesDetected={faceDetect}
-      />
-      <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-        <TouchableOpacity onPress={()=>navigation.navigate('GuestVoice')} style={styles.capture}>
-          <Text style={{ fontSize: 14 }}> SNAP </Text>
-        </TouchableOpacity>
+      {edgeStyle}
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', backgroundColor:'black', alignItems:'center' }}>
+        <Text style={{ fontSize: 14, color:'white' }}>{content}</Text>
       </View>
     </View>
   );
