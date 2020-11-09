@@ -137,6 +137,7 @@ export default {
             formData.append("apiId",API_ID);
             formData.append("apiKey",API_KEY);
             formData.append("faceId",this.user.email); // 이메일
+            formData.append("dbId", "test"); // 이메일
             formData.append("file",this.imageFile);
             var fileName = this.user.email;
             

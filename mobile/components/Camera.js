@@ -55,6 +55,7 @@ function Camera({navigation}) {
     let formData = new FormData();
     formData.append("apiId", API_ID);
     formData.append("apiKey", API_KEY);
+    formData.append("dbId", 'test');
     formData.append("file", {
       uri: imageFile.uri,
       type: 'image/jpeg',
@@ -62,7 +63,6 @@ function Camera({navigation}) {
     });
     recogFace(formData,
       (res)=>{
-        console.log(res.data.result.id);
         if(!res.data.result.id || res.data.result.id==="__no__match__") { // 인식실패
           checkGuest();
         } else { // 인식성공
@@ -79,7 +79,6 @@ function Camera({navigation}) {
   const checkGuest = () => {
     // 직원 확인에 실패했고, 방문객이면 '호출'키워드를 말해달라는 것과 함께 음성인식 시작
     setFlag(2);
-    console.log('직원인식실패, 방문객이면 호출을 말하세요');
     Voice.stop();
     Voice.start('ko-KR');
   }
@@ -105,7 +104,6 @@ function Camera({navigation}) {
     }
 
     if(num == 0) {
-      console.log("잘못말했을때");
       setTakingPic(false);
       setFlag(0);
     }
@@ -125,20 +123,16 @@ function Camera({navigation}) {
       // 로그 남기고 state 변화, 
     writeLog(data,
       (res)=>{
-        console.log(res.data.accountName);
         setFlag(1);
         setAccountName(res.data.accountName);
-        console.log(accountName+"님 출입확인 되었습니다.");
         setTimeout(()=>{
           setTakingPic(false);
           setFlag(0);
           setAccountName("");
-          console.log("원상복구");
         }, 2000);
       },
       (error)=> {
         console.log(error);
-        console.log("출입로그 찍는데 문제생김");
         setTakingPic(false);
       }
     )
@@ -150,8 +144,8 @@ function Camera({navigation}) {
         backgroundColor: 'black',
       },
       preview: {
-        flex: 5,
-        justifyContent: 'flex-end',
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
       },
       normal : {
@@ -170,46 +164,54 @@ function Camera({navigation}) {
         flex: 5,
       }
   });
-  let camera =  <RNCamera
-                  ref={ref => {
-                    this.camera = ref;
-                  }}
-                  style={styles.preview}
-                  type={RNCamera.Constants.Type.front}
-                  flashMode={RNCamera.Constants.FlashMode.on}
-                  androidCameraPermissionOptions={{
-                    title: 'Permission to use camera',
-                    message: 'We need your permission to use your camera',
-                    buttonPositive: 'Ok',
-                    buttonNegative: 'Cancel',
-                  }}
-                  androidRecordAudioPermissionOptions={{
-                    title: 'Permission to use audio recording',
-                    message: 'We need your permission to use your audio',
-                    buttonPositive: 'Ok',
-                    buttonNegative: 'Cancel',
-                  }}
-                  onFacesDetected={faceDetect}
-                />;
-  let edgeStyle;
-  let content="";
+  let camera =  
+    <RNCamera
+      ref={ref => {
+        this.camera = ref;
+      }}
+      style={styles.preview}
+      type={RNCamera.Constants.Type.front}
+      flashMode={RNCamera.Constants.FlashMode.on}
+      androidCameraPermissionOptions={{
+        title: 'Permission to use camera',
+        message: 'We need your permission to use your camera',
+        buttonPositive: 'Ok',
+        buttonNegative: 'Cancel',
+      }}
+      androidRecordAudioPermissionOptions={{
+        title: 'Permission to use audio recording',
+        message: 'We need your permission to use your audio',
+        buttonPositive: 'Ok',
+        buttonNegative: 'Cancel',
+      }}
+      onFacesDetected={faceDetect}
+    />;
+  let edge;
+  let text;
   if(flag==0) {
-    content = "";
-    edgeStyle=<View style={styles.normal}>{camera}</View>
+    edge=<View style={styles.normal}>{camera}</View>;
+    text = <View style={{flex : 1, flexDirection: 'column', justifyContent: 'center', backgroundColor:'black', alignItems:'center'}}></View>
   }else if(flag==1) {
-    content = accountName+"님 인증되었습니다.";
-    edgeStyle=<View style={styles.certificated}>{camera}</View>
+    edge=<View style={styles.certificated}>{camera}</View>;
+    text = 
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor:'black', alignItems:'center' }}>
+        <Text style={{ fontSize: 30, color:'green'}}>{accountName}님</Text>
+        <Text style={{ fontSize: 18, color:'white'}}>인증되었습니다.</Text>
+      </View>;
   }else {
-    content = "얼굴 인식에 실패하였습니다.\n 방문객이시라면 \"호출\"을 말씀해주세요."
-    edgeStyle=<View style={styles.fail}>{camera}</View>
+    edge=<View style={styles.fail}>{camera}</View>;
+    text = 
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor:'black', alignItems:'center' }}>
+        <Text style={{ fontSize: 16, color:'white'}}>얼굴인식 실패</Text>
+        <Text style={{ fontSize: 32, color:'red'}}>호출</Text>
+        <Text style={{ fontSize: 16, color:'white'}}>을 말씀해주세요.</Text>
+      </View>;
   }
 
   return (
     <View style={styles.container}>
-      {edgeStyle}
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', backgroundColor:'black', alignItems:'center' }}>
-        <Text style={{ fontSize: 14, color:'white' }}>{content}</Text>
-      </View>
+      {edge}
+      {text}
     </View>
   );
 }
