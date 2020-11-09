@@ -4,7 +4,6 @@ import {
   Text,
   View,
   Image,
-  TouchableHighlight,
 } from 'react-native';
 
 import Voice, {
@@ -14,10 +13,13 @@ import Voice, {
 } from '@react-native-community/voice';
 import { PlaceContext } from '../context/PlaceContext';
 import { BACK_URL } from '../config';
-import Phase from './GuestVoicePhase';
+import GuestVoicePhase from './GuestVoicePhase';
 
 import Sound from 'react-native-sound';
 import axios from 'axios';
+
+import micActiveIcon from '../resources/ic_mic_24px.png';
+import micDeactiveIcon from '../resources/ic_mic_none_24px.png'
 
 type Props = {};
 type State = {
@@ -34,7 +36,8 @@ let guide = new Sound('guide_tts.wav');
 let confirm = new Sound('confirm_tts.wav');
 let result = new Sound('result_tts.wav');
 const YES_FILTER = ['예', '네', '얘', '내'];
-const TRY_MAX = 50000;
+const TRY_MAX = 10;
+
 
 class GuestVoice extends Component<Props, State> {
   static contextType = PlaceContext;
@@ -52,7 +55,7 @@ class GuestVoice extends Component<Props, State> {
     // 여기부터는 음성 컴포넌트 전체적인 상태
     staff: {},
     voicePhase: 0, // 0: 초기상태, 1: 직원호출중, 2: 컨펌중, 3: 호출완료, 4: 인식횟수초과, 5: 찾는직원없음
-    
+    isListening: false,
   };
 
   constructor(props: Props) {
@@ -84,6 +87,7 @@ class GuestVoice extends Component<Props, State> {
   onSpeechStart = (e: any) => {
     console.log('onSpeechStart: ', e);
     this.setState({started: '√'});
+    this.setState({isListening: true});
   };
 
   onSpeechRecognized = (e: SpeechRecognizedEvent) => {
@@ -94,7 +98,7 @@ class GuestVoice extends Component<Props, State> {
   onSpeechEnd = (e: any) => {
     console.log('onSpeechEnd: ', e);
     this.setState({end: '√'});
-
+    this.setState({isListening: false});
   };
 
   onSpeechError = (e: SpeechErrorEvent) => {
@@ -249,8 +253,10 @@ class GuestVoice extends Component<Props, State> {
             // 정상적으로 호출메세지보냈다는 화면 및 음성 표시 및 한 루틴 종료
             this.setState({voicePhase: 3});
             result.play(() => {
-              this.setState({staff: {}, voicePhase: 0});
-              setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
+              setTimeout(() => {
+                this.setState({staff: {}, voicePhase: 0});
+                this.props.navigation.navigate('Camera')
+              }, 1000);
             });
           }
         })
@@ -264,51 +270,36 @@ class GuestVoice extends Component<Props, State> {
   }
 
   render() {
-    let isListening = (this.state.started);
-
     let information = null;
     if (this.state.voicePhase == 0) {
       information = null;
     } else if (this.state.voicePhase == 1) {
-      information = "찾는 분의 이름을 말해주세요"
+      information = "찾는 분의 이름을 말해주세요."
     } else if (this.state.voicePhase == 2) {
-      information = "입력하신 내용이 맞습니까?"
+      information = "입력하신 내용이 맞습니까?\n\n" + this.state.staff.name
     } else if (this.state.voicePhase == 3) {
-      information = this.state.staff.name + " 님에게 호출메세지를 보냈습니다. 잠시만 기다려주세요."
+      information = this.state.staff.name + " 님에게 호출메세지를 보냈습니다.\n잠시만 기다려주세요."
     } else if (this.state.voicePhase == 4) {
-      information = "인식시간 초과, 다시 시도해주세요"
+      information = "인식시간 초과, 다시 시도해주세요."
     } else {
       information = "찾을 수 없습니다."
     }
 
+    let resultTxt = this.state.results.join(',');
     return (
       <>
-      <Phase phase={this.state.voicePhase}/>
+      <GuestVoicePhase phase={this.state.voicePhase}/>
       <View style={styles.container}>
         <View style={styles.infoContainer}>
           <Text style={styles.welcome}>{information}</Text>
         </View>
 
-        <TouchableHighlight onPress={this._startRecognizing}>
-          <Image style={styles.button} source={isListening ? require('../resources/ic_mic_24px.png') : require('../resources/ic_mic_none_24px.png')} />
-        </TouchableHighlight>
-        <Text style={styles.stat}>Results</Text>
-        {this.state.results.map((result, index) => {
-          return (
-            <Text key={`result-${index}`} style={styles.stat}>
-              {result}
-            </Text>
-          );
-        })}
-        <Text style={styles.stat}>Match Result</Text>
-        <Text style={styles.stat}>
-          {this.state.staff.name}
-        </Text>
+        <Image style={styles.button} source={this.state.isListening ? micActiveIcon : micDeactiveIcon} />
 
-        <Text style={styles.stat}>누적시도: {this.state.tryCnt}</Text>
-        <Text style={styles.stat}>pitch: {this.state.pitch}</Text>
-
+        {/* <Text style={styles.stat}>pitch: {this.state.pitch}</Text> */}
       </View>
+      {/* <Text style={styles.stat}>Results {resultTxt}</Text> */}
+      {/* <Text style={styles.stat}>누적시도 {this.state.tryCnt}</Text> */}
       </>
     );
   }
