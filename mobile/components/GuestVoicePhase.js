@@ -53,5 +53,6 @@ const s = StyleSheet.create({
   },
   text: {
     color: 'gray',
+    fontFamily: 'Jua-Regular',
   },
 });
