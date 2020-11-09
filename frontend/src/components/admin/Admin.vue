@@ -4,7 +4,7 @@
         <div id="placeList">
             <div>
                 <v-icon style="margin-bottom:9px;">business</v-icon>
-                <span style="font-size:18px; margin:0 0 8px 10px;">지점 관리</span>
+                <span style="font-size:20px; margin:0 0 8px 10px;">지점 관리</span>
                 <span id="total">Total : {{totalSize}}</span>
                 <button style="float:right; margin-bottom:10px; " @click.stop="addPlace = true">
                     <v-icon>add_circle_outline</v-icon>

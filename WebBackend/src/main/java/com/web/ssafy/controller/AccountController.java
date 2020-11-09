@@ -60,7 +60,8 @@ public class AccountController {
         List<Account> result = new ArrayList<>();
 
         try {
-            resultAll = accountService.getAccountList();
+            //resultAll = accountService.findAllByOrderByAuthorityAsc(); // 권한 오름차순으로 받아오기
+            resultAll = accountService.getAccountList(); // 전체 회원 리스트
             for (int i = 0; i < resultAll.size(); i++) {
                 Place placeInfo = resultAll.get(i).getPlace();
                 if (placeInfo.getId() == place) {

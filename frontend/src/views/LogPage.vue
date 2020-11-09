@@ -207,7 +207,7 @@ export default {
 
 <style>
 #detail {
-    font-size:18px; 
+    font-size:20px; 
     margin-left: 10px;
 }
 #placeList{

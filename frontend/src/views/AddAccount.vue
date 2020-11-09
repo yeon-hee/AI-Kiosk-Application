@@ -3,10 +3,10 @@
         <h-nav></h-nav>
         <div id="placeList">
             <div>
-                <v-icon style="margin-bottom:9px;">person</v-icon>
+                <v-icon style="margin-bottom: 9px;">person</v-icon>
                 <span id="detail">직원 등록</span>
             </div>
-            <v-divider></v-divider><br><br>
+            <v-divider style="margin-top:5px;"></v-divider><br><br>
             <div class="form">
                 <v-row>
                     <v-col cols="6">
