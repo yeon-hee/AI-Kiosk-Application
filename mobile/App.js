@@ -23,7 +23,10 @@ const App: () => React$Node = () => {
   return (
     <PlaceContext.Provider value={{_place, setPlace}}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="PlaceList">
+        <Stack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName="PlaceList"
+        >
           <Stack.Screen 
             name="PlaceList" 
             component={PlaceList}
