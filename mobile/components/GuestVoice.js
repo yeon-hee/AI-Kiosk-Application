@@ -290,7 +290,6 @@ class GuestVoice extends Component<Props, State> {
         <TouchableHighlight onPress={this._startRecognizing}>
           <Image style={styles.button} source={isListening ? require('../resources/ic_mic_24px.png') : require('../resources/ic_mic_none_24px.png')} />
         </TouchableHighlight>
-        <Text>{isListening? 'Listening' : 'Waiting'}</Text>
         <Text style={styles.stat}>Results</Text>
         {this.state.results.map((result, index) => {
           return (
@@ -332,6 +331,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+    fontFamily: 'Jua-Regular',
   },
   action: {
     textAlign: 'center',
@@ -348,6 +348,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#B0171F',
     marginBottom: 1,
+    fontFamily: 'Jua-Regular',
   },
 });
 

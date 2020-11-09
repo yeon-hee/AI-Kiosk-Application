@@ -32,7 +32,7 @@ export default class PlaceEach extends Component {
           style={styles.button}
           onPress={this.pressBtn}
         >
-          <Text>{this.props.place.name}</Text>
+          <Text style={styles.text}>{this.props.place.name}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -49,5 +49,8 @@ const styles = StyleSheet.create({
   },
   button: {
 
-  }
+  },
+  text: {
+    fontFamily: 'Jua-Regular',
+  },
 });

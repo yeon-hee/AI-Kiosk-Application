@@ -37,7 +37,7 @@ export default class PlaceList extends Component {
           keyExtractor={(item) => item.id.toString()}
         />
 
-        <Text style={styles.title}>선택된 지점id: {this.context._place.id}</Text>
+        <Text style={styles.title}>선택된 지점: {this.context._place.name}</Text>
       </View>
     );
   }
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontFamily: 'Jua-Regular',
     textAlign: 'center',
     margin: 10,
   },
