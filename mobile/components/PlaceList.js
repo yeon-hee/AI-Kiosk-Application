@@ -31,13 +31,15 @@ export default class PlaceList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>지점목록</Text>
-        <FlatList data={this.state.placeList}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>지점목록</Text>
+        </View>
+        <FlatList style={styles.flatList} data={this.state.placeList}
           renderItem={({item}) => <PlaceEach place={item} navigation={this.props.navigation}/>}
           keyExtractor={(item) => item.id.toString()}
         />
 
-        <Text style={styles.title}>선택된 지점: {this.context._place.name}</Text>
+        <Text>선택된 지점: {this.context._place.name}</Text>
       </View>
     );
   }
@@ -49,10 +51,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  flatList: {
+    alignSelf: 'stretch',
+  },
+  titleContainer: {
+    alignSelf: 'stretch',
+    backgroundColor: '#AA91FB',
+    padding: 20,
+  },
   title: {
-    fontSize: 20,
+    color: '#53477A',
+    fontSize: 30,
     fontFamily: 'Jua-Regular',
     textAlign: 'center',
-    margin: 10,
   },
 });

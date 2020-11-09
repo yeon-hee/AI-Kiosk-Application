@@ -33,6 +33,7 @@ export default class PlaceEach extends Component {
           onPress={this.pressBtn}
         >
           <Text style={styles.text}>{this.props.place.name}</Text>
+          <Text style={styles.address}>{this.props.place.address}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -41,16 +42,22 @@ export default class PlaceEach extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    borderColor: '#000000',
+    padding: 20,
+    margin: 20,
+    borderRadius: 25,
+    borderColor: 'lightgray',
     borderWidth: 1,
   },
   button: {
-
+    
   },
   text: {
+    fontSize: 20,
+    fontFamily: 'Jua-Regular',
+    marginBottom: 5,
+  },
+  address: {
+    color: 'gray',
     fontFamily: 'Jua-Regular',
   },
 });

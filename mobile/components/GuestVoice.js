@@ -328,7 +328,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 30,
+    color: '#707070',
     textAlign: 'center',
     margin: 10,
     fontFamily: 'Jua-Regular',
