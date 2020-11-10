@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://k3a508.p.ssafy.io/web";
+const API_URL = "https://k3a508.p.ssafy.io/web";
 
 function login(email, password, success, fail) {
     axios.get(API_URL+'/account/login', {
