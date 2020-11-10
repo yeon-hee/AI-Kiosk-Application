@@ -1,10 +1,6 @@
 import axios from "axios";
 
-<<<<<<< HEAD
 const API_URL = "https://k3a508.p.ssafy.io/web";
-=======
-const API_URL = "http://localhost:8081/web";
->>>>>>> web/design
 
 function getLogList(email, placeName, success, fail) {
   axios.get(API_URL+'/log/getLogList', {
