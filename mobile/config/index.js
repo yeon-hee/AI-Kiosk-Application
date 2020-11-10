@@ -5,9 +5,9 @@
 const API_ID = "ssafy-tiroring";
 const API_KEY = "248b94bfae5c4382979f16a839aeecb7";
 const API_URL = "https://api.maum.ai/insight/app";
-const BACK_URL = "http://k3a508.p.ssafy.io/kiosk";
+const BACK_URL = "https://k3a508.p.ssafy.io/kiosk";
 const WEB = {
-    host: 'http://k3a508.p.ssafy.io/web',
+    host: 'https://k3a508.p.ssafy.io/web',
     path: {
         placeList: '/place/placeByAuth',
     },
