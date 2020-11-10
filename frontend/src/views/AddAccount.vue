@@ -25,14 +25,15 @@
                                 <img src="../../public/images/defaultUser.png" v-if="isImage == false" style="height:120px;">
                                 <img v-bind:src="userImage" v-else style="height:120px; width:120px;">
                             </div>
-                            <v-text-field label="이름" v-model="user.name"></v-text-field>
-                            <v-text-field label="이메일" v-model="user.email"></v-text-field>
-                            <v-text-field label="연락처" v-model="user.phone"></v-text-field>
+                            <v-text-field required :rules="usernameRules" label="이름" v-model="user.name"></v-text-field>
+                            <v-text-field required :rules="passwordRules" label="이메일" v-model="user.email"></v-text-field>
+                            <v-text-field required :rules="phoneRules" label="연락처" v-model="user.phone"></v-text-field>
                             <v-radio-group v-model="row" row>
                                 <v-radio label="회원" :value="3"></v-radio>
                                 <v-radio label="매니저" :value="2"></v-radio>
                             </v-radio-group>
-                            <div style="clear: both;"></div>
+                            <div style="clear: both; height:0px;"></div>
+                            <input type="text" disabled id="notice">
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" @click="addAccount">추가</v-btn>
@@ -89,7 +90,16 @@ export default {
                 video: true,
                 audio: true
             },
-            uploadedImageUrl: ""
+            uploadedImageUrl: "",
+            usernameRules: [
+                v => !!v || 'username is required',
+            ],
+            passwordRules: [
+                v => !!v || 'password is required',
+            ],
+            phoneRules: [
+                v => !!v || 'username is required',
+            ],
         };
     },
     mounted() {
@@ -129,30 +139,36 @@ export default {
     },
     methods: {
         addAccount() { // 회원 추가
-            const vm = this;
-            this.user.authority = this.row; 
-            this.user.photo = this.userImage; // 사진 저장
-            // face recognition - set
-            let formData = new FormData();
-            formData.append("apiId",API_ID);
-            formData.append("apiKey",API_KEY);
-            formData.append("faceId",this.user.email); // 이메일
-            formData.append("file",this.imageFile);
-            var fileName = this.user.email;
-            
-            saveFace(
-                formData,
-                function(success) {
-                    var Storage = firebase.storage().ref("photos/"+fileName).put(vm.imageFile)
-                        .then((snapshot) => {
-                            vm.savePhoto();
-                        }); 
-                },
-                function(fail) {
-                    console.log(fail);
-                    console.log("얼굴 등록 실패");
-                }
-            );
+            // 폼 입력 체크 
+            if(this.user.name.length != 0 && this.user.email.length != 0 && this.user.phone.length != 0){ // 다 입력했을 경우만
+                const vm = this;
+                this.user.authority = this.row; 
+                this.user.photo = this.userImage; // 사진 저장
+                // face recognition - set
+                let formData = new FormData();
+                formData.append("apiId",API_ID);
+                formData.append("apiKey",API_KEY);
+                formData.append("faceId",this.user.email); // 이메일
+                formData.append("file",this.imageFile);
+                var fileName = this.user.email;
+                
+                saveFace(
+                    formData,
+                    function(success) {
+                        var Storage = firebase.storage().ref("photos/"+fileName).put(vm.imageFile)
+                            .then((snapshot) => {
+                                vm.savePhoto();
+                            }); 
+                    },
+                    function(fail) {
+                        console.log(fail);
+                        console.log("얼굴 등록 실패");
+                    }
+                );
+            }
+            else {
+                document.getElementById("notice").value = '정보를 모두 입력해주세요!';
+            }
         },
         savePhoto() {
             const vm = this;
@@ -283,5 +299,10 @@ export default {
 li {
     display: inline;
     padding: 5px;
+}
+#notice {
+    font-family: sans-serif;
+    color: red;
+    width: 210px;
 }
 </style>

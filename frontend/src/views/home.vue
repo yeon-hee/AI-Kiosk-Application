@@ -187,6 +187,7 @@ export default {
                     console.log(success);
                     scope.$store.commit("setIsSigned", true);
                     scope.$store.commit("setUserEmail", success.data.email);
+                    scope.$store.commit("setUserName", success.data.name);
                     if(success.data.authority==1){ // 관리자일 경우
                         scope.$store.commit("setIsAdmin", true);
                     }
