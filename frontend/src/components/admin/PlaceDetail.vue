@@ -47,7 +47,7 @@
                             <span id="phone">{{user.phone}}</span>
                         </div>
                         <div style="float: right; margin: 10px 8px 0 0;">
-                            <button @click="clickUpdate(user)"><v-icon size="20" style="margin-right: 6px;" color="rgb(255,193,7)">create</v-icon></button>
+                            <button @click="clickUpdate(user)"><v-icon size="20" style="margin-right: 11px;" color="rgb(255,193,7)">create</v-icon></button>
                             <button @click="clickDelete(index)"><v-icon size="20" color="rgb(192,0,0)">delete</v-icon></button>
                         </div>
                 </div>
@@ -235,7 +235,7 @@ export default {
     margin-left: 13px;
 }
 #detail {
-    font-size:18px; 
+    font-size:20px; 
     margin-left: 10px;
 }
 #deletebtn {
@@ -267,15 +267,15 @@ export default {
     float: left;
 }
 #detail1 {
-    font-size: 16px;
+    font-size: 18px;
 }
 #detail2 {
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(180,180,180);
     padding-left: 3px;
 }
 #detail3 {
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(180,180,180);
 }
 #map {

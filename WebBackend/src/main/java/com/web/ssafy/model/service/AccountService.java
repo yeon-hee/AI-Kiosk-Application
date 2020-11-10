@@ -47,4 +47,8 @@ public class AccountService {
         accountRepo.deleteByEmail(email);
     }
 
+    public List<Account> findAllByOrderByAuthorityAsc() {
+        return accountRepo.findAllByOrderByAuthorityAsc();
+    }
+
 }

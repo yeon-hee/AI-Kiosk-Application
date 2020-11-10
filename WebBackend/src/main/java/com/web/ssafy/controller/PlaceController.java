@@ -48,9 +48,14 @@ public class PlaceController {
     @ApiOperation(value = "영업점 전체 검색")
     public List<Place> getAccountList(){
         logger.info("get account list");
-        List<Place> result = null;
+        List<Place> resultAll = null;
+        List<Place> result = new ArrayList<>();
         try {
-            result = placeService.getAll();
+            resultAll = placeService.getAll();
+            for(int i=0;i<resultAll.size();i++) {
+                if(resultAll.get(i).getId() == 0) continue;
+                else result.add(resultAll.get(i));
+            }
         }catch (RuntimeException e){
             logger.error(e.toString());
         }

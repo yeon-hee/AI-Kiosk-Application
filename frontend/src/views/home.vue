@@ -7,7 +7,7 @@
                 <div class="col-md-6 intro-info order-md-first order-last" data-aos="zoom-in" data-aos-delay="100">
                 <h2>AI Solutions<br>for Your <span>Business!</span></h2>
                 <div>
-                    <button @click="login" href="#services" class="btn-get-started scrollto">Get Started</button>
+                    <button @click="login" href="#services" v-if="!$store.state.isSigned" class="btn-get-started scrollto">Get Started</button>
                 </div>
                 </div>
 
@@ -187,6 +187,7 @@ export default {
                     console.log(success);
                     scope.$store.commit("setIsSigned", true);
                     scope.$store.commit("setUserEmail", success.data.email);
+                    scope.$store.commit("setUserName", success.data.name);
                     if(success.data.authority==1){ // 관리자일 경우
                         scope.$store.commit("setIsAdmin", true);
                     }

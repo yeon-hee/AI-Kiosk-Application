@@ -47,7 +47,7 @@
     $('#topbar').addClass('topbar-scrolled');
   }
 
-  // Smooth scroll for the navigation and links with .scrollto classes
+  //Smooth scroll for the navigation and links with .scrollto classes
   var scrolltoOffset = $('#header').outerHeight() - 1;
   $(document).on('click', '.main-nav a, .mobile-nav a, .scrollto', function(e) {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {

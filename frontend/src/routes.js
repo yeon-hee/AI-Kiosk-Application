@@ -6,6 +6,7 @@ import PlaceDetail from "./components/admin/PlaceDetail.vue";
 import LogPage from "./views/LogPage.vue";
 import UpdateAccount from "./views/UpdateAccount.vue";
 import BoardPage from "./views/BoardPage.vue";
+
 export default [
     {
         path : '/',
