@@ -31,7 +31,8 @@ function Camera({navigation}) {
   );
 
   const faceDetect = ({faces}) => {
-    if (faces[0]) {
+    if (faces[0] && faces[0].bounds.size.height > 150) {
+      // console.log(faces[0]);
       if(!takingPic) {
         setTakingPic(true)
         setTimeout(()=>takePicture(), 500);
@@ -55,7 +56,7 @@ function Camera({navigation}) {
     let formData = new FormData();
     formData.append("apiId", API_ID);
     formData.append("apiKey", API_KEY);
-    formData.append("dbId", 'test');
+    formData.append("dbId", 'whoami');
     formData.append("file", {
       uri: imageFile.uri,
       type: 'image/jpeg',
