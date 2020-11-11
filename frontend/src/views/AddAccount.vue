@@ -148,7 +148,7 @@ export default {
                 let formData = new FormData();
                 formData.append("apiId",API_ID);
                 formData.append("apiKey",API_KEY);
-                formData.append("dbId", "test"); // db id
+                formData.append("dbId", "whoami"); // db id
                 formData.append("faceId",this.user.email); // 이메일
                 formData.append("file",this.imageFile);
                 var fileName = this.user.email;
