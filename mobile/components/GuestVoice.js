@@ -1,67 +1,39 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} from 'react-native';
-
-import Voice, {
-  SpeechRecognizedEvent,
-  SpeechResultsEvent,
-  SpeechErrorEvent,
-} from '@react-native-community/voice';
-import { PlaceContext } from '../context/PlaceContext';
-import { BACK_URL } from '../config';
-import GuestVoicePhase from './GuestVoicePhase';
-
+import { StyleSheet, Text, View, Image, } from 'react-native';
+import Voice from '@react-native-community/voice';
 import Sound from 'react-native-sound';
-import axios from 'axios';
+
+import { PlaceContext } from '../context/PlaceContext';
+import { findStaff, sendMessageReq } from '../api/backend';
+import GuestVoicePhase from './GuestVoicePhase';
 
 import micActiveIcon from '../resources/ic_mic_24px.png';
 import micDeactiveIcon from '../resources/ic_mic_none_24px.png'
 
-type Props = {};
-type State = {
-  recognized: string;
-  pitch: string;
-  error: string;
-  end: string;
-  started: string;
-  results: string[];
-  partialResults: string[];
-};
-
-let guide = new Sound('guide_tts.wav');
-let confirm = new Sound('confirm_tts.wav');
-let result = new Sound('result_tts.wav');
+const SOUND = {
+  guide: new Sound('guide_tts.wav'),
+  confirm: new Sound('confirm_tts.wav'),
+  finish: new Sound('result_tts.wav'),
+}
 const YES_FILTER = ['예', '네', '얘', '내', '응', '그래 이놈아', '오키', '어'];
 const TRY_MAX = 10;
 
-
-class GuestVoice extends Component<Props, State> {
+class GuestVoice extends Component {
   static contextType = PlaceContext;
 
   state = {
-    recognized: '',
     pitch: '',
     error: '',
-    end: '',
-    started: '',
-    results: [],
-    partialResults: [], // 여기까지 Voice에 대한 state
+    results: [], // 여기까지 Voice에 대한 state
     tryCnt: 0,
-
-    // 여기부터는 음성 컴포넌트 전체적인 상태
     staff: {},
     voicePhase: 0, // 0: 초기상태, 1: 직원호출중, 2: 컨펌중, 3: 호출완료, 4: 인식횟수초과, 5: 찾는직원없음
     isListening: false,
   };
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     Voice.onSpeechStart = this.onSpeechStart;
-    Voice.onSpeechRecognized = this.onSpeechRecognized;
     Voice.onSpeechEnd = this.onSpeechEnd;
     Voice.onSpeechError = this.onSpeechError;
     Voice.onSpeechResults = this.onSpeechResults;
@@ -78,84 +50,16 @@ class GuestVoice extends Component<Props, State> {
 
   playSound() {
     this.setState({voicePhase: 1});
-    guide.play(() => {
+    SOUND.guide.play(() => {
       this._startRecognizing();
     });
   }
-  
-////////////////////////////////////// Voice 관련 Lifecycle 메서드 시작
-  onSpeechStart = (e: any) => {
-    console.log('onSpeechStart: ', e);
-    this.setState({started: '√'});
-    this.setState({isListening: true});
-  };
-
-  onSpeechRecognized = (e: SpeechRecognizedEvent) => {
-    console.log('onSpeechRecognized: ', e);
-    this.setState({recognized: '√'});
-  };
-
-  onSpeechEnd = (e: any) => {
-    console.log('onSpeechEnd: ', e);
-    this.setState({end: '√'});
-    this.setState({isListening: false});
-  };
-
-  onSpeechError = (e: SpeechErrorEvent) => {
-    console.log('onSpeechError: ', e);
-    this.setState({error: JSON.stringify(e.error),});
-
-    // 말한게 없을경우 여기에서 처리
-    this.setState({tryCnt: this.state.tryCnt + 1});
-    console.log('인식재시도횟수: ' + this.state.tryCnt);
-
-    if (this.state.tryCnt >= TRY_MAX) {
-      // 인식시간초과, 다시시도해주세요
-      console.log('인식시간초과, 다시시도해주세요');
-      this.setState({voicePhase: 4});
-      setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
-    } else if (e.error.message[0] == 8) {
-      setTimeout(this._startRecongnizing, 2000);
-    } else {
-      this._startRecognizing();
-    }
-  };
-
-  onSpeechResults = (e: SpeechResultsEvent) => {
-    console.log('onSpeechResults: ', e);
-    this.setState({results: e.value});
-
-    // 음성인식 정상 종료 >> 인식횟수카운트초기화
-    this.setState({tryCnt: 0});
-
-    if (this.state.voicePhase == 1) {
-      // 백앤드에 음성인식처리결과 보냄
-      this.matchRequest(e);
-    } else if (this.state.voicePhase == 2) {
-      // confirm 에 대한 음성인식처리결과 확인
-      this.checkConfirm(e);
-    }
-  };
-
-  onSpeechPartialResults = (e: SpeechResultsEvent) => {
-    // console.log('onSpeechPartialResults: ', e);
-    this.setState({partialResults: e.value});
-  };
-
-  onSpeechVolumeChanged = (e: any) => {
-    // console.log('onSpeechVolumeChanged: ', e);
-    this.setState({pitch: e.value});
-  };
 
   _startRecognizing = async () => {
     this.setState({
-      recognized: '',
       pitch: '',
       error: '',
-      started: '',
       results: [],
-      partialResults: [],
-      end: '',
     });
 
     try {
@@ -165,104 +69,86 @@ class GuestVoice extends Component<Props, State> {
     }
   };
 
-  _stopRecognizing = async () => {
-    try {
-      await Voice.stop();
-    } catch (e) {
-      console.error(e);
+////////////////////////////////////// Voice 관련 Lifecycle 메서드 시작
+  onSpeechStart = (e) => {
+    console.log('onSpeechStart: ', e);
+    this.setState({isListening: true});
+  };
+
+  onSpeechEnd = (e) => {
+    console.log('onSpeechEnd: ', e);
+    this.setState({isListening: false});
+  };
+
+  onSpeechError = (e) => {
+    console.log('onSpeechError: ', e);
+    this.setState({error: JSON.stringify(e.error),isListening: false});
+
+    // 말한게 없을경우 여기에서 처리
+    this.setState({tryCnt: this.state.tryCnt + 1});
+    console.log('인식재시도횟수: ' + this.state.tryCnt);
+
+    if (this.state.tryCnt >= TRY_MAX) {
+      // 인식시간초과, 다시시도해주세요
+      this.setState({voicePhase: 4});
+      setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
+    } else if (e.error.message[0] == 8) { // error code 8: all voice listeners are busy
+      setTimeout(this._startRecongnizing, 2000);
+    } else {
+      this._startRecognizing();
     }
   };
 
-  _cancelRecognizing = async () => {
-    try {
-      await Voice.cancel();
-    } catch (e) {
-      console.error(e);
+  onSpeechResults = (e) => {
+    console.log('onSpeechResults: ', e);
+    // 음성인식 정상 종료 >> 인식횟수카운트초기화
+    this.setState({results: e.value, tryCnt: 0});
+    if (this.state.voicePhase == 1) { // 백앤드에 음성인식처리결과 보냄
+      this.matchRequest(e);
+    } else if (this.state.voicePhase == 2) { // confirm 에 대한 음성인식처리결과 확인
+      this.checkConfirm(e);
     }
   };
 
-  _destroyRecognizer = async () => {
-    try {
-      await Voice.destroy();
-    } catch (e) {
-      console.error(e);
-    }
-    this.setState({
-      recognized: '',
-      pitch: '',
-      error: '',
-      started: '',
-      results: [],
-      partialResults: [],
-      end: '',
-    });
+  onSpeechVolumeChanged = (e) => {
+    this.setState({pitch: e.value});
   };
+
 ////////////////////////////////////// Voice 관련 Lifecycle 메서드 끝
 
 
-
   matchRequest({value}) {   // 음성인식 결과 리스트 전송해서 매치되는 직원 있는지 찾는 요청 보내기
-    let placeId = this.context._place.id;
-    const url = BACK_URL + '/account/getAccountInfo?placeId=' + placeId + '&names=' + value.join(',');
+    let data = {
+      placeId: this.context._place.id,
+      names: value.join(','),
+    }
 
-    axios.get(url)
-      .then(res => {
-        if (res.status == 200 && res.data.length != 0) {  // 정상응답 and 데이터있는경우
-
-          this.setState({staff: res.data[0],});
-
-          // 컨펌절차로 넘어감
-          this.setState({voicePhase: 2});
-          confirm.play(() => { this._startRecognizing(); });
-
-        } else {  // 서버에 매치되는 직원이 없음
-          console.log('서버에 매치되는 직원이 없음');
-          // 찾을 수 없습니다.
-          this.setState({voicePhase: 5});
-          setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
-        }
-      })
-      .catch(e => {
-          console.log('response error: '+e);
-      })
+    findStaff(data, (res) => {
+      if (res.status == 200 && res.data.length != 0) {  // 정상응답 and 데이터있는경우
+        // 결과 반영 후, 컨펌절차로 넘어감
+        this.setState({staff: res.data[0], voicePhase: 2});
+        SOUND.confirm.play(() => { this._startRecognizing(); });
+      } else {  // 서버에 매치되는 직원이 없음
+        this.setState({voicePhase: 5});
+        setTimeout(() => {this.props.navigation.navigate('Camera')}, 2000);
+      }
+    });
   }
 
   checkConfirm({value}) { // 음성인식 결과물 중 예 있는지 확인
-    console.log(value);
-
-    let saidYes = false;
-    for (let i = 0; i < value.length; i++) {
-      if (YES_FILTER.includes(value[i])) {
-        saidYes = true;
-        break;
-      }
-    }
-
+    let saidYes = value.filter( x => YES_FILTER.includes(x)).length > 0
     if (saidYes) {
-      // 컨펌확인 했으니 호출 메세지 보내
-      console.log('user confirm checked!!');
-
-      let staffCallUrl = BACK_URL + '/account/SendMessage?accountId=' + this.state.staff.id;
-
-      console.log(staffCallUrl);
-
-      axios.get(staffCallUrl)
-        .then((res) => {
-          if (res.status == 200) {
-
-            // 정상적으로 호출메세지보냈다는 화면 및 음성 표시 및 한 루틴 종료
-            this.setState({voicePhase: 3});
-            result.play(() => {
-              setTimeout(() => {
-                this.setState({staff: {}, voicePhase: 0});
-                this.props.navigation.navigate('Camera')
-              }, 1000);
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      sendMessageReq( this.state.staff.id, (res) => {
+        if (res.status == 200) {
+          // 정상적으로 호출메세지보냈다는 화면 및 음성 표시 및 시나리오 종료
+          this.setState({voicePhase: 3});
+          SOUND.finish.play(() => {
+            setTimeout(() => {
+              this.props.navigation.navigate('Camera')
+            }, 1000);
+          });
+        }
+      })
     } else {
       // 되돌아가기
       this.playSound();
@@ -287,22 +173,20 @@ class GuestVoice extends Component<Props, State> {
       information = "찾을 수 없습니다."
     }
 
-    let resultTxt = this.state.results.join(',');
     return (
       <>
-      <GuestVoicePhase phase={this.state.voicePhase}/>
-      <View style={styles.container}>
-        <View style={styles.infoContainer}>
-          {this.state.voicePhase == 2 && <Text style={styles.staffName}>{staffName}</Text>}
-          <Text style={styles.welcome}>{information}</Text>
+        <GuestVoicePhase phase={this.state.voicePhase}/>
+
+        <View style={styles.container}>
+
+          <View style={styles.infoContainer}>
+            {this.state.voicePhase == 2 && <Text style={styles.staffName}>{staffName}</Text>}
+            <Text style={styles.welcome}>{information}</Text>
+          </View>
+
+          <Image style={styles.button} source={this.state.isListening ? micActiveIcon : micDeactiveIcon} />
+
         </View>
-
-        <Image style={styles.button} source={this.state.isListening ? micActiveIcon : micDeactiveIcon} />
-
-        {/* <Text style={styles.stat}>pitch: {this.state.pitch}</Text> */}
-      </View>
-      {/* <Text style={styles.stat}>Results {resultTxt}</Text> */}
-      {/* <Text style={styles.stat}>누적시도 {this.state.tryCnt}</Text> */}
       </>
     );
   }
@@ -318,41 +202,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#F5FCFF',
   },
   infoContainer: {
     height: 200,
   },
   welcome: {
+    margin: 10,
     fontSize: 30,
+    fontFamily: 'Jua-Regular',
     color: '#707070',
     textAlign: 'center',
-    margin: 10,
-    fontFamily: 'Jua-Regular',
-  },
-  action: {
-    textAlign: 'center',
-    color: '#0000FF',
-    marginVertical: 5,
-    fontWeight: 'bold',
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  stat: {
-    textAlign: 'center',
-    color: '#B0171F',
-    marginBottom: 1,
-    fontFamily: 'Jua-Regular',
   },
   staffName: {
-    textAlign: 'center',
+    marginBottom: 30,
     fontSize: 40,
     fontFamily: 'Jua-Regular',
     color: '#663398',
-    marginBottom: 30,
+    textAlign: 'center',
   },
 });
 

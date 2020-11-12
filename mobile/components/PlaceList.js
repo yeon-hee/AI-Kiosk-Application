@@ -17,29 +17,27 @@ export default class PlaceList extends Component {
   }
 
   componentDidMount() {
-    getPlaceList(null, this.saveRes, this.errorRes);
+    getPlaceList(null, this.saveRes, (e) => console.log(e) );
   }
 
   saveRes = (res) => {
     this.setState({placeList: res.data});
   }
 
-  errorRes = (res) => {
-    console.log(res);
-  }
-
   render() {
     return (
       <View style={styles.container}>
+
         <View style={styles.titleContainer}>
           <Text style={styles.title}>지점목록</Text>
         </View>
-        <FlatList style={styles.flatList} data={this.state.placeList}
-          renderItem={({item}) => <PlaceEach place={item} navigation={this.props.navigation}/>}
+
+        <FlatList style={styles.flatList}
+          data={this.state.placeList}
           keyExtractor={(item) => item.id.toString()}
+          renderItem={({item}) => <PlaceEach place={item} navigation={this.props.navigation}/>}
         />
 
-        {/* <Text>선택된 지점: {this.context._place.name}</Text> */}
       </View>
     );
   }
