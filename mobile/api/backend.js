@@ -14,4 +14,18 @@ const getPlaceList = (data,callback,errorCallback) => {
   .catch( (res) => errorCallback(res));
 }
 
-export { writeLog, getPlaceList };
+const findStaff = ( { placeId, names }, callback, errorCallback ) => {
+  let URL = BACK_URL + '/account/getAccountInfo?placeId=' + placeId + '&names=' + names;
+  axios.get(URL)
+  .then( (res) => callback(res) )
+  .catch( (res) => console.log(res) );
+}
+
+const sendMessageReq = ( accountId, callback, errorCallback ) => {
+  let URL = BACK_URL + '/account/SendMessage?accountId=' + accountId;
+  axios.get(URL)
+  .then( (res) => callback(res) )
+  .catch( (res) => console.log(res) );
+}
+
+export { writeLog, getPlaceList, findStaff, sendMessageReq };
