@@ -35,7 +35,7 @@ type State = {
 let guide = new Sound('guide_tts.wav');
 let confirm = new Sound('confirm_tts.wav');
 let result = new Sound('result_tts.wav');
-const YES_FILTER = ['예', '네', '얘', '내'];
+const YES_FILTER = ['예', '네', '얘', '내', '응', '그래 이놈아', '오키', '어'];
 const TRY_MAX = 10;
 
 
