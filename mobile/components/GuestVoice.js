@@ -35,7 +35,7 @@ type State = {
 let guide = new Sound('guide_tts.wav');
 let confirm = new Sound('confirm_tts.wav');
 let result = new Sound('result_tts.wav');
-const YES_FILTER = ['예', '네', '얘', '내'];
+const YES_FILTER = ['예', '네', '얘', '내', '응', '그래 이놈아', '오키', '어'];
 const TRY_MAX = 10;
 
 
@@ -271,12 +271,14 @@ class GuestVoice extends Component<Props, State> {
 
   render() {
     let information = null;
+    let staffName = null;
     if (this.state.voicePhase == 0) {
       information = null;
     } else if (this.state.voicePhase == 1) {
       information = "찾는 분의 이름을 말해주세요."
     } else if (this.state.voicePhase == 2) {
-      information = "입력하신 내용이 맞습니까?\n\n" + this.state.staff.name
+      information = "입력하신 내용이 맞습니까?"
+      staffName = this.state.staff.name;
     } else if (this.state.voicePhase == 3) {
       information = this.state.staff.name + " 님에게 호출메세지를 보냈습니다.\n잠시만 기다려주세요."
     } else if (this.state.voicePhase == 4) {
@@ -291,6 +293,7 @@ class GuestVoice extends Component<Props, State> {
       <GuestVoicePhase phase={this.state.voicePhase}/>
       <View style={styles.container}>
         <View style={styles.infoContainer}>
+          {this.state.voicePhase == 2 && <Text style={styles.staffName}>{staffName}</Text>}
           <Text style={styles.welcome}>{information}</Text>
         </View>
 
@@ -343,6 +346,13 @@ const styles = StyleSheet.create({
     color: '#B0171F',
     marginBottom: 1,
     fontFamily: 'Jua-Regular',
+  },
+  staffName: {
+    textAlign: 'center',
+    fontSize: 40,
+    fontFamily: 'Jua-Regular',
+    color: '#663398',
+    marginBottom: 30,
   },
 });
 
