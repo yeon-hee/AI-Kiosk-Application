@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://k3a508.p.ssafy.io/web";
+const API_URL = "http://localhost:8081/web";
 
 function addplace(name, address, phone, success, fail) {
     const body = {

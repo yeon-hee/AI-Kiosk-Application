@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://k3a508.p.ssafy.io/web";
+const API_URL = "http://localhost:8081/web";
 
 function login(email, password, success, fail) {
     axios.get(API_URL+'/account/login', {
@@ -53,6 +53,17 @@ function updateUser(email, name, phone, authority, photo, place, success, fail) 
     .catch(fail);
 }
 
+function updatePw(name, email, password, success, fail) {
+  const body = {
+    email: email,
+    name: name,
+    password: password
+};
+  axios.put(API_URL+"/account/updatePw", body)
+    .then(success)
+    .catch(fail);
+}
+
 function getAccountById(id,success, fail) {
   axios.get(API_URL+'/account/getAccountById', {
     params: {
@@ -96,4 +107,5 @@ export { addUser,
   getPlaceAccount,
   getAccountById,
   updateUser,
-  getAccountByEmail };
+  getAccountByEmail,
+  updatePw };

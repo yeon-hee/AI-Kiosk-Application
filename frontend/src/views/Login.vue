@@ -43,10 +43,10 @@ export default {
                 this.user.email,
                 this.user.password,
                 function(success){
-                    console.log(success);
                     scope.$store.commit("setIsSigned", true);
                     scope.$store.commit("setUserEmail", success.data.email);
                     scope.$store.commit("setUserName", success.data.name);
+                    scope.$store.commit("setUserId", success.data.id);
                     if(success.data.authority==1){ // 관리자일 경우
                         scope.$store.commit("setIsAdmin", true);
                     }

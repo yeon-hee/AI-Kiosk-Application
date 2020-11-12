@@ -202,6 +202,22 @@ public class AccountController {
         return result;
     }
 
+
+    @PutMapping("/updatePw")
+    @ApiOperation(value = "회원정보 비밀번호 수정")
+    public Account updatePw(@RequestBody Account account) {
+        logger.info("update account");
+        Account result = null;
+        try {
+
+            result = accountService.updatePw(account);
+        } catch (RuntimeException e) {
+            logger.error(e.toString());
+        }
+
+        return result;
+    }
+
     @DeleteMapping("/delete")
     @ApiOperation(value = "회원 삭제")
     public int delete(@RequestParam String email) {

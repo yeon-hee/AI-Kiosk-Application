@@ -43,6 +43,18 @@ public class AccountService {
         return before;
     }
 
+    public Account updatePw(Account account) {
+        String name = account.getName();
+        String email = account.getEmail();
+        String password = account.getPassword();
+
+        Account before = this.getByEmail(email);
+        before.setName(name);
+        before.setPassword(password);
+
+        return before;
+    }
+
     public void delete(String email) {
         accountRepo.deleteByEmail(email);
     }
