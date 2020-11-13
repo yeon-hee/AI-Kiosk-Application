@@ -146,7 +146,7 @@
                     <div class="member-info">
                         <div class="member-info-content">
                         <h4>최연희</h4>
-                        <span>팀원 및 웹 풀스텍</span>
+                        <span>팀원 및 웹 풀스택</span>
                         </div>
                     </div>
                     </div>
@@ -158,7 +158,7 @@
                     <div class="member-info">
                         <div class="member-info-content">
                         <h4>김동현</h4>
-                        <span>팀원 및 앱 얼굴 인식</span>
+                        <span>팀원 및 얼굴 인식</span>
                         </div>
                     </div>
                     </div>
