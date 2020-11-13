@@ -12,8 +12,8 @@
                 </div>
                 </div>
 
-                <div class="col-md-6 intro-images order-md-last order-first" data-aos="zoom-out" data-aos-delay="200">
-                <img src="../../public/images/intro-img.svg" alt="" class="images-fluid">
+                <div class="col-md-6 intro-images order-md-last order-first" style="text-align:center" data-aos="zoom-out" data-aos-delay="200">
+                <img style="height:500px" src="../../public/images/mobile_pages.gif" alt="">
                 </div>
             </div>
 
