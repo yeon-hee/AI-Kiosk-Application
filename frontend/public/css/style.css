@@ -31,7 +31,7 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "jua", sans-serif;
   font-weight: 400;
   margin: 0 0 20px 0;
   padding: 0;
@@ -41,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 .back-to-top {
   position: fixed;
   display: none;
-  background: #1bb1dc;
+  background: #AA91FB;
   color: #fff;
   width: 44px;
   height: 44px;
@@ -416,6 +416,10 @@ h1, h2, h3, h4, h5, h6 {
   background-size: cover;
 }
 
+#hero .intro-info {
+  padding-left: 40px;
+}
+
 @media (max-width: 767px) {
   #hero {
     height: auto;
@@ -443,14 +447,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .intro-info h2 {
-  color: #413e66;
+  color: #707070;
   margin-bottom: 40px;
   font-size: 48px;
   font-weight: 700;
 }
 
+#hero .intro-info h3 {
+  color: #707070;
+  margin-bottom: 40px;
+}
+
 #hero .intro-info h2 span {
-  color: #1bb1dc;
+  color: #F5859D;
 }
 
 @media (max-width: 767px) {
@@ -461,22 +470,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .intro-info .btn-get-started, #hero .intro-info .btn-services {
-  font-family: "Montserrat", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: jua;
+  letter-spacing: 4px;
   display: inline-block;
   padding: 10px 32px;
-  border-radius: 4px;
+  border-radius: 15px;
   transition: 0.5s;
   color: #fff;
-  background: #1bb1dc;
-  color: #fff;
+  background: #7c59b1;
 }
 
 #hero .intro-info .btn-get-started:hover, #hero .intro-info .btn-services:hover {
-  background: #0a98c0;
+  background: #64478f;
 }
 
 /*--------------------------------------------------------------
@@ -490,7 +495,7 @@ section {
 --------------------------------*/
 .section-header h3 {
   font-size: 36px;
-  color: #413e66;
+  color: #707070;
   text-align: center;
   font-weight: 700;
   position: relative;
@@ -502,7 +507,7 @@ section {
   margin: auto;
   font-size: 15px;
   padding-bottom: 60px;
-  color: #535074;
+  color: #707070;
   width: 50%;
 }
 
@@ -515,7 +520,7 @@ section {
 /* Section with background
 --------------------------------*/
 .section-bg {
-  background: #f5f8fd;
+  background: #f8f8f8;
 }
 
 /* About Us Section
@@ -599,11 +604,12 @@ section {
 /* Services Section
 --------------------------------*/
 #services {
-  padding: 60px 0 40px 0;
+  padding: 60px 0 60px 0;
 }
 
 #services .box {
-  padding: 30px;
+  padding: 20px;
+  min-height: 300px;
   position: relative;
   overflow: hidden;
   border-radius: 10px;
@@ -619,13 +625,13 @@ section {
 }
 
 #services .icon {
-  margin: 0 auto 15px auto;
+  margin: 0 auto 40px auto;
   padding-top: 12px;
   display: inline-block;
   text-align: center;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 120px;
+  height: 120px;
 }
 
 #services .icon i {
@@ -634,21 +640,18 @@ section {
 }
 
 #services .title {
-  font-weight: 700;
+  /* font-weight: 700; */
   margin-bottom: 15px;
-  font-size: 18px;
+  font-size: 22px !important;
+  letter-spacing: 2px !important;
 }
 
 #services .title a {
-  color: #111;
-}
-
-#services .box:hover .title a {
-  color: #1bb1dc;
+  color: #707070;
 }
 
 #services .description {
-  font-size: 14px;
+  font-size: 17px;
   line-height: 28px;
   margin-bottom: 0;
   text-align: left;
@@ -762,8 +765,18 @@ section {
 }
 
 #features h4 {
+  /* font-weight: 600; */
+  font-size: 35px;
+}
+
+#features h4 span {
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 20px;
+}
+
+#features p {
+  font-size: 1.1rem;
 }
 
 /* Portfolio Section
@@ -972,7 +985,7 @@ section {
 /* Team Section
 --------------------------------*/
 #team {
-  padding: 60px 0;
+  padding: 80px 0;
 }
 
 #team .member {
@@ -980,6 +993,7 @@ section {
   margin-bottom: 20px;
   position: relative;
   overflow: hidden;
+  border-radius: 50px;
 }
 
 #team .member .member-info {
@@ -1010,6 +1024,7 @@ section {
 }
 
 #team .member h4 {
+  font-family: Montserrat, sans-serif;
   font-weight: 700;
   margin-bottom: 2px;
   font-size: 18px;
@@ -1017,6 +1032,8 @@ section {
 }
 
 #team .member span {
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
   font-style: italic;
   display: block;
   font-size: 13px;
@@ -1383,7 +1400,7 @@ section {
 #footer {
   padding: 0 0 30px 0;
   font-size: 14px;
-  background: #fff;
+  background: #f8f8f8;
 }
 
 #footer .footer-top {
@@ -1631,4 +1648,24 @@ section {
 
 #footer .credits a:hover {
   color: #0a98c0;
+}
+
+#services hr, #features hr, #team hr, #footer hr {
+  width: 200px;
+  display: block;
+  margin: auto;
+  height: 2px;
+  background-color: #AA91FB;
+}
+
+#how-it-works {
+  width: 300px !important;
+}
+
+#team .container .section-header > h4 {
+  padding-top: 40px;
+}
+
+.profile {
+  padding: 40px !important;
 }
