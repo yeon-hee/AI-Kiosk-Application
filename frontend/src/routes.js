@@ -6,7 +6,8 @@ import PlaceDetail from "./components/admin/PlaceDetail.vue";
 import LogPage from "./views/LogPage.vue";
 import UpdateAccount from "./views/UpdateAccount.vue";
 import BoardPage from "./views/BoardPage.vue";
-import EditAccount from "./views/EditPassword.vue"
+import EditAccount from "./views/EditPassword.vue";
+import RegistBoard from "./views/WriteBoard.vue";
 
 export default [
     {
@@ -43,6 +44,11 @@ export default [
         path : '/updateAccount/:user_id/:place_id',
         name : 'UpdateAccount',
         component : UpdateAccount
+    },
+    {
+        path : '/board/creat',
+        name : 'RegistBoard',
+        component : RegistBoard
     },
     {
         path : '/edit/:id',
