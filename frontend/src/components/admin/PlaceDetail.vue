@@ -232,20 +232,6 @@ export default {
                     }
                 )
             }
-
-
-            
-
-
-            // for(var i=0;i<this.users.length;i++){
-            //     console.log(this.users[i].name);
-            //     if(this.users[i].name == this.searchName) {
-            //         console.log('찾음');
-            //         searchUser.push(this.users[i]);
-            //     }
-            // }
-
-            // this.users = searchUser;
         }
        
     },
