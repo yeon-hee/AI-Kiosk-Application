@@ -28,9 +28,14 @@
                 <v-icon style="margin-bottom:9px;">business</v-icon>
                 <span id="detail">직원 관리</span>
                 <span id="total">Total : {{totalSize}}</span>
+
                 <button style="float:right; margin-bottom:10px; " @click="addAccount">
                     <v-icon>add_circle_outline</v-icon>
                 </button>
+
+                <input type="search" id="searchbox" v-model="searchName" placeholder="검색..." @keypress="search($event)"/>
+
+
             </div>
             <div style="clear: both;"></div>
             <v-divider style="margin-top:0px;"></v-divider><br><br>
@@ -107,6 +112,7 @@ import {getPlace} from '../../api/place.js';
 import {deletePlace} from '../../api/place.js';
 import {getAccountList} from '../../api/user.js';
 import {getPlaceAccount} from '../../api/user.js';
+import {getAccountByName} from '../../api/user.js';
 import {deleteUser} from '../../api/user.js';
 import firebase from 'firebase/app';
 import 'firebase/storage';
@@ -122,6 +128,7 @@ export default {
             place: [],
             users: [],
             deleteIndex: "",
+            searchName: ""
         };
     },
     components: {
@@ -145,7 +152,6 @@ export default {
         getPlaceAccount(
             this.id,
             function(success){
-                console.log(success);
                 for(var i=0; i<success.data.length; i++){
                     if(success.data[i].authority == 1) continue;
                     vm.users.push(success.data[i]);
@@ -202,6 +208,44 @@ export default {
             var user_id = user.id;
             var place_id = this.id;
             this.$router.push("/updateAccount/"+user_id+"/"+place_id);
+        },
+        search(event) { // 검색한 회원 가져오기
+
+            var Datas = [];
+            const vm = this;
+            vm.totalSize = 0;
+            if(event.keyCode == 13) {
+                getAccountByName(
+                    this.id,
+                    this.searchName,
+                    function(success){
+                        for(var i=0; i<success.data.length; i++){
+                            if(success.data[i].authority == 1) continue;
+                            Datas.push(success.data[i]);
+                            vm.totalSize++;
+                        }
+                        vm.users = Datas;
+                        console.log('이름으로 조회 성공');
+                    },
+                    function(fail){
+                        console.log('이름으로 조회 실패');
+                    }
+                )
+            }
+
+
+            
+
+
+            // for(var i=0;i<this.users.length;i++){
+            //     console.log(this.users[i].name);
+            //     if(this.users[i].name == this.searchName) {
+            //         console.log('찾음');
+            //         searchUser.push(this.users[i]);
+            //     }
+            // }
+
+            // this.users = searchUser;
         }
        
     },
@@ -210,6 +254,16 @@ export default {
 
 <style scoped>
 
+#searchbox {
+    border-radius: 20px;
+    width: 190px;
+    float: right;
+    height: 23px;
+    margin: 2px 10px 0px 0px;
+    padding-left: 7px;
+    outline:none;
+    border: 1.5px solid rgb(188,188,188);
+}
 #placeList{
     text-align:left; 
     width:80%; 
@@ -296,4 +350,5 @@ export default {
     margin:auto; 
     margin-bottom: 15px;
 }
+
 </style>

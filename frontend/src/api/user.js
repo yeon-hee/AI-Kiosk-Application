@@ -100,6 +100,17 @@ function getPlaceAccount(place, success, fail) {
     .catch(fail);
 }
 
+function getAccountByName(place, name, success, fail) {
+  axios.get(API_URL+'/account/getAccountByName', {
+      params: {
+        place: place,
+        name: name
+      }
+    })
+    .then(success)
+    .catch(fail);
+}
+
 export { addUser, 
   login,
   getAccountList,
@@ -108,4 +119,5 @@ export { addUser,
   getAccountById,
   updateUser,
   getAccountByEmail,
-  updatePw };
+  updatePw,
+  getAccountByName };
