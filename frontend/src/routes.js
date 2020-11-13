@@ -13,7 +13,7 @@ export default [
     {
         path : '/',
         name : 'Home',
-        component : Home
+        component : Home,
     },
     {
         path : '/adminMenu/detail/:id',
@@ -23,7 +23,7 @@ export default [
     {
         path : '/logMenu',
         name : 'LogPage',
-        component : LogPage
+        component : LogPage,
     },
     {
         path : '/adminMenu',
@@ -36,12 +36,12 @@ export default [
         component : BoardPage
     },
     {
-        path : '/addAccount/:id',
+        path : '/adminMenu/addAccount/:id',
         name : 'AddAccount',
         component : AddAccount
     },
     {
-        path : '/updateAccount/:user_id/:place_id',
+        path : '/adminMenu/updateAccount/:user_id/:place_id',
         name : 'UpdateAccount',
         component : UpdateAccount
     },

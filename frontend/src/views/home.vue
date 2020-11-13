@@ -174,8 +174,7 @@ export default {
     components: {
         HNav
     },
-    mounted() {
-        
+    created() {
     },
     methods: {
         login() { // admin 계정으로 로그인
