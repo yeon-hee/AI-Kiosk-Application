@@ -7,7 +7,7 @@
                 <v-icon style="margin-bottom:8px;" size="20">assignment</v-icon>
                 <span id="detail">공지사항</span>
                 
-                <v-btn depressed color="info" id="create" @click="create">글쓰기</v-btn>
+                <v-btn depressed color="info" id="create" @click="create" v-if="$store.state.isAdmin">글쓰기</v-btn>
                 <div style="clear: both;"></div>
             </div>
             <v-divider style="margin-top:5px;"></v-divider><br>
