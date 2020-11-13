@@ -97,4 +97,33 @@ export default {
 #logo{
     width: 100px;
 }
+
+.v-toolbar__content {
+    margin: auto;
+}
+
+.v-toolbar__content {
+  width: 100%;
+  padding: 12px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 960px) {
+  .v-toolbar__content {
+    max-width: 900px;
+  }
+}
+@media (min-width: 1264px) {
+  .v-toolbar__content {
+    max-width: 1185px;
+  }
+}
+@media (min-width: 1904px) {
+  .v-toolbar__content {
+    max-width: 1785px;
+  }
+}
+.v-toolbar__content--fluid {
+  max-width: 100%;
+}
 </style>
