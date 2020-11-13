@@ -14,7 +14,7 @@
 
             <ul class="list" v-for="(item,index) in items" :key="item.title">
                 <li>
-                    <input type="checkbox" class="list-checkbox" v-bind:id="'list-input'+index" />
+                    <input type="radio" name="list" class="list-checkbox" v-bind:id="'list-input'+index" />
                     <label v-bind:for="'list-input'+index" class="titles" style="height:45px;">
                         <span style="float:left; font-family: sans-serif;">{{item.title}}</span>
                         <span style="float:right; font-family: sans-serif;">{{item.time}}</span>
