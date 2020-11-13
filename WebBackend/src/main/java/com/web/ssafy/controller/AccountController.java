@@ -74,6 +74,28 @@ public class AccountController {
         return result;
     }
 
+    @GetMapping("/getAccountByName")
+    @ApiOperation(value = "해당 지점 회원 이름으로 조회")
+    public List<Account> getAccountByName(@RequestParam int place, @RequestParam String name) throws Exception {
+        logger.info("place account by name");
+        List<Account> resultAll = null;
+        List<Account> result = new ArrayList<>();
+
+        try {
+            resultAll = accountService.getAccountList(); // 전체 회원 리스트
+            for (int i = 0; i < resultAll.size(); i++) {
+                Place placeInfo = resultAll.get(i).getPlace();
+                String accountName = resultAll.get(i).getName();
+                if (placeInfo.getId() == place && accountName.equals(name)) {
+                    result.add(resultAll.get(i));
+                }
+            }
+        } catch (RuntimeException e) {
+            logger.error(e.toString());
+        }
+        return result;
+    }
+
     @GetMapping("/login")
     @ApiOperation(value = "로그인")
     public Account login(@RequestParam String email, @RequestParam String password) throws Exception {
@@ -195,6 +217,22 @@ public class AccountController {
         Account result = null;
         try {
             result = accountService.update(account);
+        } catch (RuntimeException e) {
+            logger.error(e.toString());
+        }
+
+        return result;
+    }
+
+
+    @PutMapping("/updatePw")
+    @ApiOperation(value = "회원정보 비밀번호 수정")
+    public Account updatePw(@RequestBody Account account) {
+        logger.info("update account");
+        Account result = null;
+        try {
+
+            result = accountService.updatePw(account);
         } catch (RuntimeException e) {
             logger.error(e.toString());
         }
