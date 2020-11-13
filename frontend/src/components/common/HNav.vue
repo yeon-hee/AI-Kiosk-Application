@@ -7,10 +7,14 @@
                 </router-link>
             </v-toolbar-title>
             <v-toolbar-title id="header2">
-                <router-link id="link-to-home" @click.native="home" to="/">HOME</router-link>
-                <router-link id="link-to-entrance" @click.native="log" to="/logMenu" >출입기록조회</router-link>
-                <router-link id="link-to-admin" @click.native="admin" to="/adminMenu" v-if="$store.state.isAdmin">관리자메뉴</router-link>
-                <router-link id="link-to-board" @click.native="board" to="/boardMenu">공지사항</router-link>
+                <router-link id="link-to-home" @click.native="home" v-if="path == ''" to="/" style="color:rgb(83,71,122);">HOME</router-link>
+                <router-link id="link-to-home" @click.native="home" to="/" v-else style="color:white;">HOME</router-link>
+                <router-link id="link-to-entrance" @click.native="log" v-if="path == 'logMenu'" to="/logMenu" style="color:rgb(83,71,122);">출입기록조회</router-link>
+                <router-link id="link-to-entrance" @click.native="log" v-else to="/logMenu" style="color:white;">출입기록조회</router-link>
+                <router-link id="link-to-admin" @click.native="admin" to="/adminMenu" v-if="$store.state.isAdmin && path == 'adminMenu'" style="color:rgb(83,71,122);">관리자메뉴</router-link>
+                <router-link id="link-to-admin" @click.native="admin" to="/adminMenu" v-else-if="$store.state.isAdmin" style="color:white;">관리자메뉴</router-link>
+                <router-link id="link-to-board" @click.native="board" v-if="path == 'boardMenu'" to="/boardMenu" style="color:rgb(83,71,122);">공지사항</router-link>
+                <router-link id="link-to-board" @click.native="board" v-else to="/boardMenu" style="color:white;">공지사항</router-link>
                 <router-link id="link-to-edit" > </router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>
@@ -45,47 +49,16 @@ export default {
                 y: 0
             },
             userName: this.$store.state.user.name,
+            path: "",
         };
     },
     components: {
         Login
     },
     created() {
-        console.log('안녕');
-        console.log(this.userName);
-        console.log(this.$store.state.user.id);
-
+        this.path = this.$route.path.split("/")[1];
     },
     methods: {
-        home() {
-            document.getElementById("link-to-home").style.color = "rgb(83,71,122)";
-            document.getElementById("link-to-entrance").style.color = "white";
-            document.getElementById("link-to-admin").style.color = "white";
-            document.getElementById("link-to-board").style.color = "white";
-        },
-        log() {
-            document.getElementById("link-to-home").style.color = "white";
-            document.getElementById("link-to-entrance").style.color = "rgb(83,71,122)";
-            document.getElementById("link-to-admin").style.color = "white";
-            document.getElementById("link-to-board").style.color = "white";
-        },
-        admin() {
-            document.getElementById("link-to-home").style.color = "white";
-            document.getElementById("link-to-entrance").style.color = "white";
-            document.getElementById("link-to-admin").style.color = "rgb(83,71,122)";
-            document.getElementById("link-to-board").style.color = "white";
-        },
-        board() {
-            document.getElementById("link-to-home").style.color = "white";
-            document.getElementById("link-to-entrance").style.color = "white";
-            document.getElementById("link-to-admin").style.color = "white";
-            document.getElementById("link-to-board").style.color = "rgb(83,71,122)";
-        },
-        edit() {
-            var id = this.$store.state.user.id;
-            this.$router.push("/edit/" + id);
-        }
-
     },
 };
 </script>
@@ -95,15 +68,6 @@ export default {
 
 *{
     font-family: 'Jua', sans-serif;
-}
-
-#link-to-home{
-    color:rgb(83,71,122);
-}
-
-#link-to-entrance, #link-to-admin, #link-to-board{
-    color: white;
-
 }
 
 #link-to-home{

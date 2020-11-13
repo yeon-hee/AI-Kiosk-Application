@@ -182,7 +182,7 @@ export default {
         },
         addAccount() {
             var id = this.id;
-            this.$router.push("/addAccount/"+id);
+            this.$router.push("/adminMenu/addAccount/"+id);
         },
         clickDelete(index){
             this.accountDelete = true;
@@ -207,7 +207,7 @@ export default {
         clickUpdate(user) { // 회원 정보 수정
             var user_id = user.id;
             var place_id = this.id;
-            this.$router.push("/updateAccount/"+user_id+"/"+place_id);
+            this.$router.push("/adminMenu/updateAccount/"+user_id+"/"+place_id);
         },
         search(event) { // 검색한 회원 가져오기
 
