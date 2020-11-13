@@ -72,7 +72,7 @@ public class PlaceController {
             resultAll = placeService.getAll();
             if(authority == 1){ // 어드민
                 for(int i = 0; i < resultAll.size(); i++) {
-                    if (resultAll.get(i).getID() == 0) continue;
+                    if (resultAll.get(i).getId() == 0) continue;
                     else result.add(resultAll.get(i));
                 }
             }
