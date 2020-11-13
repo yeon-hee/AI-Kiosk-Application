@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <h-nav></h-nav>
         <div id="placeList">
             <div>

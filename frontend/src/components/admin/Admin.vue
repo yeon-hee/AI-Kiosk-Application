@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
         <h-nav></h-nav>
         <div id="placeList">
             <div>
@@ -77,7 +77,6 @@ export default {
 <style scoped>
 #placeList{
     text-align:left; 
-    width:80%; 
     margin:auto; 
     margin-top:80px;
 }
