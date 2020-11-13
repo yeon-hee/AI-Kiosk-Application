@@ -71,7 +71,10 @@ public class PlaceController {
         try {
             resultAll = placeService.getAll();
             if(authority == 1){ // 어드민
-                result = resultAll;
+                for(int i = 0; i < resultAll.size(); i++) {
+                    if (resultAll.get(i).getID() == 0) continue;
+                    else result.add(resultAll.get(i));
+                }
             }
             else { // 매니저, 회원
                 Account account = accountService.getByEmail(email);
