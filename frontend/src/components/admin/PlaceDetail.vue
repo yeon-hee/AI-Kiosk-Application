@@ -20,9 +20,11 @@
                     <span id="detail3">{{place.address}}</span>
                 </div>
                 <div style="float: right;">
-                    <img id="map" src="../../../public/images/defaultmap.jpg"> 
+                    <div id="map" style="width:270px; height: 217px; margin: 2px 11px 0 0;"></div>
                 </div>
             </div><br><br>
+
+            <!-- <div id="map" style="width:100%; height:331px;"></div> -->
 
             <div>
                 <v-icon style="margin-bottom:9px;">business</v-icon>
@@ -32,10 +34,7 @@
                 <button style="float:right; margin-bottom:10px; " @click="addAccount">
                     <v-icon>add_circle_outline</v-icon>
                 </button>
-
                 <input type="search" id="searchbox" v-model="searchName" placeholder="검색..." @keypress="search($event)"/>
-
-
             </div>
             <div style="clear: both;"></div>
             <v-divider style="margin-top:0px;"></v-divider><br><br>
@@ -128,14 +127,16 @@ export default {
             place: [],
             users: [],
             deleteIndex: "",
-            searchName: ""
+            searchName: "",
+            map : {},
+            geocoder: {},
         };
     },
     components: {
         HNav,
         EditPlace
     },
-    created(){
+    mounted() {
         const vm = this;
         getPlace(
             this.id,
@@ -143,12 +144,15 @@ export default {
                 console.log('지점 상세 조회 성공');
                 vm.place = success.data;
                 vm.$store.commit("setplaceId", vm.id);
+                window.kakao && window.kakao.maps ? vm.initMap() : vm.addScript();
             },
             function(fail){
                 console.log('지점 상세 조회 실패');
             }
-        ),
-
+        )
+    },
+    created(){
+        const vm = this;
         getPlaceAccount(
             this.id,
             function(success){
@@ -165,6 +169,36 @@ export default {
         )
     },
     methods: {
+        addScript() {
+            const script = document.createElement('script')
+                    /* global kakao */
+            script.onload = () => kakao.maps.load(this.initMap)
+            script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=db24865f1eb9b22075a541cd14b82446&autoload=false&libraries=services'
+            document.head.appendChild(script);
+        },
+        initMap() { 
+            var container = document.getElementById('map') 
+            var options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 4
+            }
+            var map = new kakao.maps.Map(container, options); // 지도 생성
+            var geocoder = new kakao.maps.services.Geocoder();
+            const vm = this;
+            console.log(vm.place);
+            geocoder.addressSearch(vm.place.address, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                            console.log('지도 들어옴');
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            var marker = new kakao.maps.Marker({ // 마커 출력
+                                map: map,
+                                position: coords
+                            });
+                            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                            map.setCenter(coords);
+                        }
+                });
+        },
         deletePlace() {
             const vm = this;
             this.dialog = false;
@@ -294,15 +328,15 @@ export default {
     border-radius: 27px;
 }
 .detailbox {
-    height: 150px;
+    height: 250px;
     width:80%; 
     border: 1.5px solid rgb(210,210,210);
-    border-radius: 23px;
+    border-radius: 35px;
     padding: 12px 10px 10px 10px;
     margin:auto; 
 }
 .placeDetail {
-    padding: 20px 0 0 12px;
+    padding: 70px 0 0 15px;
     line-height: 28px;
     float: left;
 }
@@ -318,10 +352,7 @@ export default {
     font-size: 15px;
     color: rgb(180,180,180);
 }
-#map {
-    height: 100px;
-    margin: 11px 15px 0 0;
-}
+
 #total{
     margin-left :12px;
     font-size: 13px;
