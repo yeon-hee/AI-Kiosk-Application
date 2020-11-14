@@ -20,7 +20,7 @@
                     <span id="detail3">{{place.address}}</span>
                 </div>
                 <div style="float: right;">
-                    <div id="map" style="width:270px; height: 217px; margin: 2px 11px 0 0;"></div>
+                    <div id="map" style="width:350px; height: 217px; margin: 2px 11px 0 0;"></div>
                 </div>
             </div><br><br>
 
