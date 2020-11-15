@@ -116,6 +116,9 @@
                 <div class="row">
                     <iframe style="margin:auto; height: 315px;" width="560" height="315" src="https://www.youtube.com/embed/vmDDOFXSgAs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
+                <div>
+                    <img id="web_pages" src="../../public/images/web_pages.gif" class="images-fluid" alt="">
+                </div>
             </div>
         </section><!-- End UCC Section -->
         <!-- ======= Team Section ======= -->
@@ -245,5 +248,8 @@ div {
     font-size:38px;
     padding-top: 200px;
 }
-
+#web_pages {
+    display: block;
+    margin: 100px auto 0 auto;
+}
 </style>
