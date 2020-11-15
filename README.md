@@ -52,7 +52,7 @@ slack, mattermost 등 기존에 널리 활용되는 사내 메신저와의 원�
 목소리를 인지하여 별도의 터치스크린을 통한 조작 없이 간편하게 찾는 직원에게 호출 메세지를 전송합니다. 
 
 ### 2) 서비스 구조도
-<img src="./docs/resources/서비스아키텍처.png" style="padding:30px; display:block; margin:auto;">
+<img src="./docs/resources/service_architecture.png" style="padding:30px; display:block; margin:auto;">
 
 &nbsp;
 &nbsp;
