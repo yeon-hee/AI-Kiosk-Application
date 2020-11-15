@@ -59,6 +59,9 @@ export default {
         this.path = this.$route.path.split("/")[1];
     },
     methods: {
+        edit() {
+            this.$router.push("edit/" + this.$store.state.user.id);
+        }
     },
 };
 </script>
