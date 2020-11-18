@@ -1,25 +1,29 @@
 package com.web.ssafy.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@Data
 public class Account {
-    @Id
-    String email;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
+    String email;
     String password;
     String name;
     String phone;
-    boolean isManager;
+    int authority;
     String photo;
 
     @ManyToOne

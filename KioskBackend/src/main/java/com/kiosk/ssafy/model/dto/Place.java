@@ -1,5 +1,6 @@
 package com.kiosk.ssafy.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +18,9 @@ public class Place {
 
     String name;
     String address;
+    String phone;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     Set<Account> accountSet = new HashSet<>();
 

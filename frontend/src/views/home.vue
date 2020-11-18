@@ -1,146 +1,255 @@
 <template>
     <div>
-        <div>
-            <video ref="video" id="video" width="640" height="480" autoplay></video>
-        </div><br>
-        <div>
-            <input type="text" v-model="name" size="20" placeholder="이메일을 입력하세요">
-        </div><br>
-        <div>
-            <button id="snap" v-on:click="capture()">캡처</button>
-            <button id="snap" v-on:click="save()">저장</button>
-            <button id="snap" v-on:click="recognize()">인식</button>
-        </div>
-        <!-- <button v-on:click="getList()">Get List</button> -->
-        <canvas ref="canvas" id="canvas" width="640" height="480"></canvas>
-        <ul>
-            <li v-for="c in captures">
-                <img v-bind:src="c" height="50" />
-            </li>
-        </ul>
+        <h-nav></h-nav>
+        <section id="hero" class="clearfix" style="background-color:white;">
+            <div class="container d-flex h-100">
+            <div class="row justify-content-center align-self-center" data-aos="fade-up">
+                <div class="col-md-6 intro-info order-md-first order-last" data-aos="zoom-in" data-aos-delay="100">
+                <h2>WHO <span>A</span>M <span>I</span></h2>
+                <h3>AI기반 비접촉 출입관리 솔루션</h3>
+                <div>
+                    <button @click="login" v-if="!$store.state.isSigned" class="btn-get-started scrollto">둘러보기</button>
+                </div>
+                </div>
+
+                <div class="col-md-6 intro-images order-md-last order-first" style="text-align:center" data-aos="zoom-out" data-aos-delay="200">
+                <img style="height:500px" src="../../public/images/mobile_pages.gif" alt="">
+                </div>
+            </div>
+
+            </div>
+        </section><!-- End Hero -->
+        <section id="services" class="services section-bg">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                <h3>Services</h3>
+                <hr>
+                <p></p>
+                </header>
+
+                <div class="row">
+
+                <div class="col-md-6 col-lg-3 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="box">
+                    <div class="icon"><img src="../../public/images/d1.png" alt=""></div>
+                    <h4 class="title"><a href="" style="pointer-events: none; ">비접촉 인터페이스</a></h4>
+                    <p class="description" style="text-align: center;">교차감염으로부터의 안전성 제고</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="box">
+                    <div class="icon"><img src="../../public/images/d2.png" alt=""></div>
+                    <h4 class="title"><a href="" style="pointer-events: none;">모바일 키오스크</a></h4>
+                    <p class="description" style="text-align: center;">간편하고 합리적인 솔루션</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="box">
+                    <div class="icon"><img src="../../public/images/d3.png" alt=""></div>
+                    <h4 class="title"><a href="" style="pointer-events: none;">웹 UI</a></h4>
+                    <p class="description" style="text-align: center;">어디서든 쉽게 기록 조회 및 관리</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="box">
+                    <div class="icon"><img src="../../public/images/d4.png" alt=""></div>
+                    <h4 class="title"><a href="" style="pointer-events: none;">알림 연동</a></h4>
+                    <p class="description" style="text-align: center;">사내메신저와 원활한 연동</p>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </section><!-- End Services Section -->
+        <section id="features" class="features" >
+            <div class="container" data-aos="fade-up">
+                <header class="section-header">
+                    <h3>Features</h3>
+                    <hr>
+                    <p></p>
+                </header>
+
+                <div class="row feature-item">
+                <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+                    <img src="../../public/images/Face-recognition-1.jpg" class="images-fluid" alt="">
+                </div>
+                <div class="col-lg-6 wow fadeInUp pt-5 pt-lg-0" data-aos="fade-left" data-aos-delay="150">
+                    <h4 style="margin-top:100px;">얼굴 인식 <span>Face Recognition</span></h4>
+                    <p style="margin-top: 40px">
+                    이미지를 512차원의 Vector로 변환한 후, 값을 대조하여 얼굴을 인증합니다.
+                    </p>
+                    <p>
+                    신속하고 정확한 본인 인증을 통해 출입 기록을 남기고, 사무실에 출입할 수 있습니다.
+                    </p>
+                </div>
+                </div>
+
+                <div class="row feature-item mt-5 pt-5">
+                <div class="col-lg-6 wow fadeInUp order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                    <img src="../../public/images/voice.jpg" class="images-fluid" alt="">
+                </div>
+
+                <div class="col-lg-6 wow fadeInUp pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right" data-aos-delay="150">
+                    <h4 style="margin-top:80px;">음성 인식 <span>Voice Recognition</span></h4>
+                    <p style="margin-top: 40px">
+                    목소리를 인지하여 별도의 터치스크린을 통한 조작 없이
+                    </p>
+                    <p>
+                    간편하게 찾는 직원에게 호출 메세지를 전송합니다.
+                    </p>
+                </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Features Section -->
+        <!-- ======= UCC Section ======= -->
+        <section id="team" class="team section-bg">
+            <div class="container" data-aos="fade-up">
+                <div class="section-header">
+                    <h3>How It Works</h3>
+                    <hr id="how-it-works" class="how-it-works">
+                    <p></p>
+                </div>
+                <div class="row">
+                    <iframe style="margin:auto; height: 315px;" width="560" height="315" src="https://www.youtube.com/embed/hzqgPfFtRno" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div>
+                    <img id="web_pages" src="../../public/images/web_pages.gif" class="images-fluid" alt="">
+                </div>
+            </div>
+        </section><!-- End UCC Section -->
+        <!-- ======= Team Section ======= -->
+        <section id="team" class="team">
+            <div class="container" data-aos="fade-up">
+                <div class="section-header">
+                <h3>About Us</h3>
+                <hr>
+                <h4 style="text-align:center">상호보완하며 시너지를 창출하는 개발팀 띠로링입니다.</h4>
+                </div>
+
+                <div class="row">
+                <div class="col-lg-4 col-md-6 profile" data-aos="fade-up" data-aos-delay="100">
+                    <div class="member">
+                    <img src="../../public/images/team-1.jpg" class="images-fluid" alt="">
+                    <div class="member-info">
+                        <div class="member-info-content">
+                        <h4>정명주</h4>
+                        <span>팀장 및 음성 인식</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 profile" data-aos="fade-up" data-aos-delay="200">
+                    <div class="member">
+                    <img src="../../public/images/team-2.jpg" class="images-fluid" alt="">
+                    <div class="member-info">
+                        <div class="member-info-content">
+                        <h4>최연희</h4>
+                        <span>팀원 및 웹 풀스택</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 profile" data-aos="fade-up" data-aos-delay="300">
+                    <div class="member">
+                    <img src="../../public/images/team-3.jpg" class="images-fluid" alt="">
+                    <div class="member-info">
+                        <div class="member-info-content">
+                        <h4>김동현</h4>
+                        <span>팀원 및 얼굴 인식</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </section><!-- End Team Section -->
+             <!-- ======= Footer ======= -->
+        <footer id="footer" class="section-bg">
+            <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong>WHO AM I</strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                Designed by Tiroring
+            </div>
+            </div>
+        </footer><!-- End  Footer -->
     </div>
 </template>
 
 <script>
 
-import {saveFace} from "../api/face.js";
-import {getFaceList} from "../api/face.js";
-import {recogFace} from "../api/face.js";
-import {API_ID} from "../config/index.js";
-import {API_KEY} from "../config/index.js";
+import HNav from "../components/common/HNav";
+import {login} from "../api/user.js";
 
 export default {
     name: "app",
     data() {
         return {
-            imageFile: {},
-            name: "",
-            fileName: "",
-            video: {},
-            canvas: {},
-            captures: []
+            user: {
+                email: "a508whoami@gmail.com",
+                password: "admin"
+            }
+            
         };
     },
-    mounted() {
-        this.video = this.$refs.video;
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-                this.video.srcObject = stream;
-                this.video.play();
-            });
-        }
+    components: {
+        HNav
+    },
+    created() {
     },
     methods: {
-        capture() {
-            console.log("cap");
-            this.canvas = this.$refs.canvas;
-            var context = this.canvas.getContext("2d").drawImage(this.video, 0, 0, 640, 480);
-            this.captures.push(canvas.toDataURL("image/png"));
-            var imgurl = canvas.toDataURL("image/png");
-
-            var canvasBin = atob(imgurl.split(',')[1]);
-            var array = [];
-            for(var i = 0; i<canvasBin.length; i++){
-                array.push(canvasBin.charCodeAt(i));
-            }
-
-            this.imageFile = new Blob([new Uint8Array(array)], {type: 'image/png'}); // Blob 생성
-        },
-        save() {
-            // face recognition - set
-
-            let formData = new FormData();
-            formData.append("apiId",API_ID);
-            formData.append("apiKey",API_KEY);
-            formData.append("faceId",this.name);
-            formData.append("file",this.imageFile);
-            
-            saveFace(
-                formData,
-                function(success) {
-                    console.log(success);
-                },
-                function(fail) {
-                    console.log(fail);
-                    console.log("얼굴 등록 실패");
-                }
-            );
-        },
-
-        getList(){ // face recognition - get face list
-
-            let formData = new FormData();
-            formData.append("apiId",API_ID);
-            formData.append("apiKey",API_KEY);
-
-            getFaceList(
-                formData,
+        login() { // admin 계정으로 로그인
+            const scope = this;
+            login(
+                this.user.email,
+                this.user.password,
                 function(success){
                     console.log(success);
+                    scope.$store.commit("setIsSigned", true);
+                    scope.$store.commit("setUserEmail", success.data.email);
+                    scope.$store.commit("setUserName", success.data.name);
+                    if(success.data.authority==1){ // 관리자일 경우
+                        scope.$store.commit("setIsAdmin", true);
+                    }
+                    location.reload(); // 창 닫기
                 },
                 function(fail){
-                    console.log(fail);
-                    console.log('얼굴 리스트 가져오기 실패');
+                    alert("유저 이메일 혹은 비밀번호가 일치하지 않습니다.");
                 },
-            );
-        },
-
-        recognize(){ // face recognition - recognize
-
-            let formData = new FormData();
-            formData.append("apiId",API_ID);
-            formData.append("apiKey",API_KEY);
-            formData.append("file",this.imageFile);
-
-            recogFace(
-                formData,
-                function(success){
-                    console.log(success);
-                },
-                function(fail){
-                    console.log(fail);
-                    console.log('얼굴 등록 실패');
-                },
-            );
+            )
         }
+        
+
     },
 };
 </script>
 
 <style>
-#app {
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+div {
+    color: #707070;
 }
-#video {
-    background-color: #000000;
+
+.banner{
+    height:500px;
+    background: linear-gradient( to right, rgb(236,222,227), rgb(204,234,238) );
 }
-#canvas {
-    display: none;
+#service{
+    font-family: 'Archivo Black', sans-serif;
+    font-size:38px;
+    padding-top: 200px;
 }
-li {
-    display: inline;
-    padding: 5px;
+#web_pages {
+    display: block;
+    margin: 100px auto 0 auto;
 }
 </style>
